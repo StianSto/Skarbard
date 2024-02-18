@@ -12,8 +12,11 @@ type GameOptions = {
 type Player = {
 	id: string,
 	name: string,
-	total?: number,
-	points?: number[]
+}
+
+interface ActivePlayer extends Player {
+	total: number,
+	points: number[]
 }
 
 type Game = {
@@ -22,14 +25,12 @@ type Game = {
 	options: GameOptions
 }
 
-type Table = Player[]
-
 
 type PlayGame = {
 	id: string,
 	rounds: number,
 	game: Game
-	table: Table,
+	players: ActivePlayer[],
 }
 
 
