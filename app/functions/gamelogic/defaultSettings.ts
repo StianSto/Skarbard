@@ -10,23 +10,23 @@ export type GameOptions = {
 }
 
 export type CONDITIONS_GameIsFinished = {
-	afterXTurns?: number,
-	afterXTime?: number,
-	whenAPlayerGetsXPoints?: number,
+	afterXTurns?: number | null,
+	afterXTime?: number | null,
+	whenAPlayerGetsXPoints?: number | null,
 }
 
 export type CONDITIONS_ScoreBy = {
-	mostPoints?: boolean,
-	fewestPoints?: boolean,
+	mostPoints?: boolean | null,
+	fewestPoints?: boolean | null,
 }
 
 export const defaultSettings: GameOptions = {
 	gameIsFinished: {
-		active: true,
+		active: false,
 		conditions: {
-			afterXTime: 20,
-			afterXTurns: undefined,
-			whenAPlayerGetsXPoints: undefined
+			afterXTime: null,
+			afterXTurns: null,
+			whenAPlayerGetsXPoints: null
 		}
 	},
 

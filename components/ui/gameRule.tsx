@@ -20,7 +20,7 @@ export default function GameRule({
   editable?: boolean;
 }) {
   const rule = useGameSettingsStore(
-    (state) => state.gameOptions[ruleKey as keyof GameOptions]
+    (state) => state.game.options[ruleKey as keyof GameOptions]
   );
   const updateRule = useGameSettingsStore((state) => state.updateRule);
   const conditions = rule?.conditions;
