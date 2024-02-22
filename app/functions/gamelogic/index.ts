@@ -1,56 +1,34 @@
-
+import { PlayGame } from "./types";
 
 // check if game meeets conditions for end.
-// if game s finished, calculate winner and results.
-
-
-
-
-// export default function handleGameState(game) { }
+// if game is finished, calculate winner and results.
 
 export function handleGameState(table: PlayGame) {
-
-
 	const gameRules = table.game.options;
 	const turns = table.rounds;
 	const players = table.players
 	let isGameFinished = false
 
-	console.log(turns);
-
-	if (gameRules.gameIsFinished) {
-		if (gameRules.gameIsFinished.afterXTurns) finishAfterXTurns()
-		if (gameRules.gameIsFinished.whenAPlayerGetsXPoints) finishWhenAPlayerGetsXPoints()
+	if (gameRules.gameIsFinished.active) {
+		let conditions = gameRules.gameIsFinished.conditions
+		if (conditions.afterXTurns) finishAfterXTurns(conditions.afterXTurns)
+		if (conditions.whenAPlayerGetsXPoints) finishWhenAPlayerGetsXPoints(conditions.whenAPlayerGetsXPoints)
 	}
-
-
-
-	console.log(isGameFinished);
 
 	return isGameFinished
 
-
-
-	function finishAfterXTurns() {
-		if (gameRules.gameIsFinished?.afterXTurns) {
-			if (turns >= gameRules.gameIsFinished.afterXTurns) {
-				isGameFinished = true;
-			}
-		}
+	// functions for checking conditions
+	function finishAfterXTurns(x: number) {
+		if (turns >= x) isGameFinished = true
 	}
 
-	function finishWhenAPlayerGetsXPoints() {
-		if (gameRules.gameIsFinished?.whenAPlayerGetsXPoints) {
-			if (!gameRules.gameIsFinished) return
+	function finishWhenAPlayerGetsXPoints(xPoints: number) {
+		let pointLimit = xPoints ?? 0
+		players.forEach((player: any) => {
 
-			let pointLimit = gameRules.gameIsFinished.whenAPlayerGetsXPoints ?? 0
-			players.map((player) => {
+			if (player.total >= pointLimit) isGameFinished = true
+		});
 
-				if (player.total >= pointLimit) {
-					isGameFinished = true;
-				}
-			});
-		}
 	}
 }
 
