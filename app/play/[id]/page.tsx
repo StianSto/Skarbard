@@ -53,7 +53,9 @@ export default function PlayGame({ params }: { params: { id: string } }) {
       if (player.id !== playerID) return player;
 
       player.points[turn] = points;
-      player.total = player.points.reduce((sum, current) => sum + current);
+      player.total = player.points.reduce(
+        (sum: number, current: number) => sum + current
+      );
       return player;
     });
 

@@ -46,7 +46,7 @@ export default function Overview({ params }: any) {
 
   return (
     <main>
-      <h1>Overview</h1>
+      <h1 className="font-lucky">Overview</h1>
       <h2>Game: {game ? game.title : <i>choose a game</i>}</h2>
       <section className="mt-4">
         <div className="flex justify-between items-center">
