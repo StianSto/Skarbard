@@ -1,8 +1,11 @@
 "use client";
 
+import { Game, PlayGame, Player } from "@/app/functions/gamelogic/types";
+import { useGameSettingsStore } from "@/app/store";
 import { Button } from "@/components/ui/button";
+import GameRule from "@/components/ui/gameRule";
 import Link from "next/link";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Overview({ params }: any) {
@@ -14,8 +17,18 @@ export default function Overview({ params }: any) {
   const [creatingTable, setCreatingTable] = useState(false);
   const router = useRouter();
 
-  const gameLib: Game[] = JSON.parse(localStorage.getItem("games") || "");
-  const game = gameLib.find((game) => game.id === gameID);
+  const gameLib = new Map<string, Game>(
+    JSON.parse(localStorage.getItem("gameLibrary") || "[]")
+  );
+  const game = gameID ? gameLib.get(gameID) : null;
+  const updateGameState = useGameSettingsStore(
+    (state) => state.updateGameState
+  );
+  const resetToDefault = useGameSettingsStore((state) => state.resetToDefault);
+
+  useEffect(() => {
+    game ? updateGameState(game) : resetToDefault();
+  }, []);
 
   function createTable() {
     setCreatingTable(true);
@@ -45,24 +58,19 @@ export default function Overview({ params }: any) {
   }
 
   return (
-    <main>
+    <main className="py-8 mx-auto max-w-md flex flex-col flex-1 h-screen">
       <h1 className="font-lucky">Overview</h1>
-      <h2>Game: {game ? game.title : <i>choose a game</i>}</h2>
       <section className="mt-4">
-        <div className="flex justify-between items-center">
-          <h2>Game rules</h2>
-          <Link href={"/game"}>Edit</Link>
-        </div>
-
-        <div>
-          <h3>Game Ends</h3>
-          <p>rule 1</p>
-          <p>rule 2</p>
-        </div>
-        <div>
-          <h3>winner is</h3>
-          <p>condition 1</p>
-        </div>
+        <h2>Game: {game ? game.title : <i>choose a game</i>}</h2>
+        {game && (
+          <>
+            <h2>Game rules</h2>
+            {Object.entries(game.options).map(
+              ([ruleKey, { active }], index) =>
+                active && <GameRule ruleKey={ruleKey} key={index} />
+            )}
+          </>
+        )}
       </section>
       <section className="mt-4">
         <div className="flex justify-between items-center">

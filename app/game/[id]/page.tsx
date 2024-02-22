@@ -48,11 +48,8 @@ export default function GameByID({ params }: { params: { id: string } }) {
       gameLibMap = new Map();
     }
 
-    console.log(gameLibMap);
     setGameLib(gameLibMap);
-
     const updateGame = gameLibMap.get(id);
-    console.log(updateGame);
 
     updateGame
       ? updateGameState(updateGame)
@@ -137,9 +134,6 @@ export default function GameByID({ params }: { params: { id: string } }) {
           Save Game Settings
         </Button>
       </div>
-      {/* <Link href={`/game/overview/${slug}`}>
-        <button className="p-4">Overview</button>
-      </Link> */}
     </main>
   );
 }
