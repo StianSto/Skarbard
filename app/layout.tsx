@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Luckiest_Guy } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+const luckiestGuy = Luckiest_Guy({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-luckiestguy",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Skårbård",
@@ -15,8 +25,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html
+      lang="en"
+      className={` font-sans ${inter.variable} ${luckiestGuy.variable}`}
+    >
+      <body className="px-8 h-dvh">{children}</body>
     </html>
   );
 }
