@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { produce } from 'immer'
 import { GameOptions, defaultSettings } from '../functions/gamelogic/defaultSettings'
-import { Game } from '../functions/gamelogic/types'
+import { Game, Player } from '../functions/gamelogic/types'
 
 
 interface GameState {
@@ -51,4 +51,45 @@ export const useGameSettingsStore = create<GameState & Actions>((set) => ({
 			draft.game.options = defaultSettings
 		}))
 	}
+}))
+
+
+const STORE_KEY_PLAYERS = "players"
+interface Store {
+	players: Player[]
+}
+interface StoreActions {
+	addPlayer: (newPlayer: Player) => void
+	removePlayer: (playerID: string) => void
+	editPlayer: (playerID: string, newName: string) => void
+	savePlayers: (players: Player[]) => void
+}
+
+export const storePlayers = create<Store & StoreActions>((set) => ({
+	players: JSON.parse(localStorage.getItem('players') || "[]"),
+
+	addPlayer: (newPlayer) => {
+		set((state) => {
+			const updatePlayers = [...state.players, newPlayer]
+			state.savePlayers(updatePlayers)
+			return { players: updatePlayers };
+		})
+	},
+
+	removePlayer: (id) => set((state) => {
+		const updatePlayers = state.players.filter(player => player.id !== id)
+		state.savePlayers(updatePlayers)
+		return { players: updatePlayers };
+	}),
+
+	editPlayer: (id, name) => set(state => {
+		const updatePlayers = state.players.map(player => {
+			return player.id !== id ? player : { id, name }
+		})
+		state.savePlayers(updatePlayers)
+
+		return { players: updatePlayers }
+	}),
+
+	savePlayers: (players) => localStorage.setItem(STORE_KEY_PLAYERS, JSON.stringify(players))
 }))
