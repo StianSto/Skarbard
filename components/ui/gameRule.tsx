@@ -9,7 +9,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useGameSettingsStore } from "@/app/store";
+import { useGameSettingsStore } from "@/store";
 import { GameOptions } from "@/app/functions/gamelogic/defaultSettings";
 
 export default function GameRule({

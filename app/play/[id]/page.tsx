@@ -11,13 +11,17 @@ import {
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
+import { ActivePlayer } from "@/app/functions/gamelogic/types";
 
 export default function PlayGame({ params }: { params: { id: string } }) {
   // get table from localstorage
-  const fetchTable = localStorage.getItem(params.id) || "";
+
+  let fetchTable = "";
+  if (typeof window !== "undefined")
+    fetchTable = localStorage.getItem(params.id) || "";
 
   // states
-  const [table, setTable] = useState<PlayGame>(JSON.parse(fetchTable));
+  const [table, setTable] = useState(JSON.parse(fetchTable));
   const [turns, setTurns] = useState(table.rounds);
   const [currentTurn, setCurrentTurn] = useState(turns);
   const [gameFinished, setGameFinished] = useState(false);

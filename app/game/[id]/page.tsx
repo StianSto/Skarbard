@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { useGameSettingsStore } from "../../store";
+import { useGameSettingsStore } from "../../../store";
 import { Game } from "../../functions/gamelogic/types";
 import { defaultSettings } from "@/app/functions/gamelogic/defaultSettings";
 

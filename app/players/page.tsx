@@ -11,40 +11,36 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { storePlayers } from "../../store";
+import { LucideX } from "lucide-react";
 
 export default function SetTable() {
-  const savedPlayers = localStorage.getItem("players");
-  const [players, setPlayers] = useState<Player[]>(
-    savedPlayers ? JSON.parse(savedPlayers) : []
-  );
   const [player, setPlayer] = useState("");
 
+  const players = storePlayers((state) => state.players);
+  const addPlayer = storePlayers((state) => state.addPlayer);
+  const removePlayer = storePlayers((state) => state.removePlayer);
+
   function handleAddPlayer() {
-    const newPlayer: Player = {
+    addPlayer({
       id: self.crypto.randomUUID(),
       name: player,
-    };
-
-    const updatePlayers = [...players, newPlayer];
-    setPlayers(updatePlayers);
+    });
     setPlayer("");
   }
-
-  useEffect(() => {
-    localStorage.setItem("players", JSON.stringify(players));
-  }, [players]);
 
   return (
     <main className="py-8 mx-auto max-w-md flex flex-col flex-1 h-screen">
       <h2>Players</h2>
-      <div className="flex flex-wrap gap-2">
+      <ul className="flex flex-wrap gap-2">
         {players.map((player, index) => (
-          <p key={index} className="px-4 py-2 rounded bg-cyan-700">
-            {player.name}
-          </p>
+          <li key={index} className="px-2 py-2 rounded bg-cyan-700 flex">
+            <p className="px-2">{player.name}</p>
+            <LucideX onClick={() => removePlayer(player.id)} />
+          </li>
         ))}
-      </div>
+      </ul>
       <Dialog>
         <DialogTrigger asChild>
           <Button>Add Player</Button>
@@ -61,7 +57,7 @@ export default function SetTable() {
           </div>
         </DialogContent>
       </Dialog>
-      <Link href={"/game/overview/123"}>Overview</Link>
+      {/* <Link href={"/game/overview/123"}>Overview</Link> */}
     </main>
   );
 }

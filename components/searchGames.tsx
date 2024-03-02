@@ -1,26 +1,27 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { Game } from "@/app/functions/gamelogic/types";
 import { Input } from "./ui/input";
 import { Search } from "lucide-react";
 import { Separator } from "./ui/separator";
+import { Button } from "./ui/button";
+import { storeGameLib } from "@/store";
 
-export default function SearchGames() {
-  const fetchGamesFromLocal = JSON.parse(
-    localStorage.getItem("gameLibrary") || "[[],[]]"
-  );
-  const gameLib: Game[] = fetchGamesFromLocal.map(
-    (gameMap: [string, Game]) => gameMap[1]
-  );
+export default function SearchGames({ selectGame }: { selectGame: any }) {
+  const gameLib = Array.from(storeGameLib((state) => state.gameLib).values());
+
   const [searchInput, setSearchInput] = useState("");
-  const [searchGameArray, setSearchGameArray] = useState<Game[]>(gameLib);
+  const [searchGameArray, setSearchGameArray] = useState<Game[]>([]);
 
   useEffect(() => {
-    setSearchGameArray(() =>
-      gameLib.filter((game) => game.title.includes(searchInput))
-    );
+    setSearchGameArray(() => {
+      return gameLib.filter((game) => game.title.includes(searchInput));
+    });
   }, [searchInput]);
+
+  const handleClick = (value: string) => {
+    selectGame(value);
+  };
 
   return (
     <div>
@@ -38,8 +39,14 @@ export default function SearchGames() {
       <Separator className="mb-2" />
       <ul className="flex flex-wrap gap-3">
         {searchGameArray.map(({ id, title }) => (
-          <li key={id} className="bg-white text-secondary rounded p-2 px-4">
-            {title}
+          <li key={id}>
+            <Button
+              variant={"default"}
+              className="bg-white hover:bg-slate-100"
+              onClick={() => handleClick(id)}
+            >
+              {title}
+            </Button>
           </li>
         ))}
       </ul>
