@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 import GameRule from "@/components/ui/gameRule";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { rule } from "postcss";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { v4 as uuidv4 } from "uuid";
 
 interface ITable {
   game: Game;
@@ -21,23 +21,22 @@ interface ITable {
 
 export default function Table({ params }: any) {
   // "game" or "players"
-  const [multistep, setMultistep] = useState("game");
+  const [multistep, setMultistep] = useState("players");
+  const [newPlayer, setNewPlayer] = useState("");
 
   let localTable: ITable | null = null;
-  const players = storePlayers((state) => state.players);
+  const { players, addPlayer, editPlayer, removePlayer } = storePlayers(
+    (state) => state
+  );
   const gameLib = storeGameLib((state) => state.gameLib);
 
-  const updateGameState = useGameSettingsStore(
-    (state) => state.updateGameState
+  const { game, resetToDefault, updateGameState } = useGameSettingsStore(
+    (state) => state
   );
-  const resetToDefault = useGameSettingsStore((state) => state.resetToDefault);
-  const game = useGameSettingsStore((state) => state.game);
   const [gameLoaded, setGameLoaded] = useState(false);
 
   if (typeof window !== "undefined") {
     localTable = JSON.parse(localStorage.getItem("table") || "[]");
-
-    // gameLib = new Map(JSON.parse(localStorage.getItem("gameLibrary") || "[]"));
   }
 
   useEffect(() => {
@@ -63,6 +62,16 @@ export default function Table({ params }: any) {
   function handleRemove(id: string) {
     resetToDefault();
     setGameLoaded(false);
+  }
+
+  function handleAddPlayer(e: FormEvent) {
+    e.preventDefault();
+
+    addPlayer({
+      id: uuidv4(),
+      name: newPlayer,
+    });
+    setNewPlayer("");
   }
 
   useEffect(() => {
@@ -101,13 +110,20 @@ export default function Table({ params }: any) {
       <nav className="mt-2">
         <div className="flex font-lucky">
           <Button
-            className={`text-center font-bold text-2xl flex-1 rounded-e-none ${
+            className={`text-center font-bold text-2xl flex-1 rounded-e-none  ${
               multistep !== "game" ? "opacity-50" : null
             }`}
             onClick={() => setMultistep("game")}
             variant={"ghost"}
           >
-            Game
+            <span className="relative">
+              Game
+              {gameLoaded && (
+                <span className="absolute -top-2 -right-2 rotate-45 text-lg text-green-500">
+                  OK
+                </span>
+              )}
+            </span>
           </Button>
           <Button
             className={`text-center font-bold text-2xl flex-1 p-0 hover:opacity-100 rounded-s-none ${
@@ -116,7 +132,14 @@ export default function Table({ params }: any) {
             onClick={() => setMultistep("players")}
             variant={"ghost"}
           >
-            Players
+            <span className="relative">
+              Players
+              {players && (
+                <span className="absolute -top-2 -right-2 rotate-45 text-lg text-green-500 drop-shadow shadow-black">
+                  OK
+                </span>
+              )}
+            </span>
           </Button>
         </div>
       </nav>
@@ -142,7 +165,6 @@ export default function Table({ params }: any) {
         </section>
       )}
 
-      {/* players */}
       {gameLoaded && multistep === "game" && (
         <section className="my-10">
           <div className="flex justify-between items-center">
@@ -167,32 +189,33 @@ export default function Table({ params }: any) {
         </section>
       )}
 
-      {/* <section className="mt-4">
-        <h2>Game: {game ? game.title : <i>choose a game</i>}</h2>
-        {game && (
-          <>
-            <h2>Game rules</h2>
-            {Object.entries(game.options).map(
-              ([ruleKey, { active }], index) =>
-                active && <GameRule ruleKey={ruleKey} key={index} />
-            )}
-          </>
-        )}
-      </section>
-      <section className="mt-4">
-        <div className="flex justify-between items-center">
-          <h2>Players</h2>
-          <Link href={"/table"}>Edit</Link>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {players.map((player, index) => (
-            <p key={index} className="px-4 py-2 rounded bg-cyan-700">
-              {player.name}
-            </p>
-          ))}
-        </div>
-      </section>
-					*/}
+      {players && multistep === "players" && (
+        <section className="my-10">
+          <div>
+            <form
+              className="flex gap-4 mt-4"
+              onSubmit={(e) => handleAddPlayer(e)}
+            >
+              <Input
+                value={newPlayer}
+                onChange={(e) => setNewPlayer(e.target.value)}
+              />
+              <Button>Add Player</Button>
+            </form>
+          </div>
+
+          <div className="flex flex-wrap gap-2 my-10">
+            {players.map((player, index) => (
+              <p
+                key={index}
+                className="px-6 py-2 rounded bg-slate-100 text-primary font-bold"
+              >
+                {player.name}
+              </p>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* <Button onClick={createTable}>
         {creatingTable ? "Creating Table" : "Start Game"}
