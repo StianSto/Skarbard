@@ -1,6 +1,11 @@
 "use client";
 
-import { Game, PlayGame, Player } from "@/app/functions/gamelogic/types";
+import {
+  ActivePlayer,
+  Game,
+  PlayGame,
+  Player,
+} from "@/app/functions/gamelogic/types";
 import { storeGameLib, storePlayers, useGameSettingsStore } from "@/store";
 import SearchGames from "@/components/searchGames";
 import { Button } from "@/components/ui/button";
@@ -10,6 +15,7 @@ import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { v4 as uuidv4 } from "uuid";
+import dynamic from "next/dynamic";
 
 interface ITable {
   game: Game;
@@ -19,10 +25,11 @@ interface ITable {
   isGameFinished: boolean;
 }
 
-export default function Table({ params }: any) {
+function Table({ params }: any) {
   // "game" or "players"
   const [multistep, setMultistep] = useState("players");
   const [newPlayer, setNewPlayer] = useState("");
+  const [creatingTable, setCreatingTable] = useState("Start Game");
 
   let localTable: ITable | null = null;
   const { players, addPlayer, editPlayer, removePlayer } = storePlayers(
@@ -77,32 +84,35 @@ export default function Table({ params }: any) {
   useEffect(() => {
     console.log(game);
   }, [game]);
-  // function createTable() {
-  //   setCreatingTable(true);
 
-  //   // create array of player instances with scrores
-  //   const playersScore = players.map((player) => {
-  //     return {
-  //       id: player.id,
-  //       name: player.name,
-  //       total: 0,
-  //       points: [],
-  //     };
-  //   });
+  function createTable() {
+    if (!game) return;
+    if (!players) return;
 
-  //   //
+    setCreatingTable("Creating Table");
 
-  //   if (!game) return;
-  //   const table: PlayGame = {
-  //     id: self.crypto.randomUUID(),
-  //     players: playersScore,
-  //     game,
-  //     rounds: 0,
-  //   };
+    // create array of player instances with scores
+    const playersScore: ActivePlayer[] = players.map((player) => {
+      return {
+        id: player.id,
+        name: player.name,
+        total: 0,
+        points: [],
+      };
+    });
 
-  //   localStorage.setItem(table.id, JSON.stringify(table));
-  //   router.push("/play/" + table.id);
-  // }
+    //
+
+    const table: PlayGame = {
+      id: self.crypto.randomUUID(),
+      players: playersScore,
+      game,
+      rounds: 0,
+    };
+
+    localStorage.setItem(table.id, JSON.stringify(table));
+    // router.push("/play/" + table.id);
+  }
 
   return (
     <main className="py-8 mx-auto max-w-md flex flex-col flex-1 h-screen">
@@ -217,9 +227,11 @@ export default function Table({ params }: any) {
         </section>
       )}
 
-      {/* <Button onClick={createTable}>
-        {creatingTable ? "Creating Table" : "Start Game"}
-      </Button> */}
+      {gameLoaded && players && (
+        <Button onClick={createTable}>{creatingTable}</Button>
+      )}
     </main>
   );
 }
+
+export default dynamic(() => Promise.resolve(Table), { ssr: false });
