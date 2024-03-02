@@ -1,8 +1,14 @@
 import { create } from 'zustand'
 import { produce } from 'immer'
-import { GameOptions, defaultSettings } from '../functions/gamelogic/defaultSettings'
-import { Game, Player } from '../functions/gamelogic/types'
+import { GameOptions, defaultSettings } from '../app/functions/gamelogic/defaultSettings'
+import { Game, Player } from '../app/functions/gamelogic/types'
 
+// Initialise a localstorage to avoid error on server side
+let localStorage: Storage;
+if (typeof window !== 'undefined') localStorage = window.localStorage
+
+
+// Store Game Settings
 
 interface GameState {
 	game: Game
@@ -53,20 +59,23 @@ export const useGameSettingsStore = create<GameState & Actions>((set) => ({
 	}
 }))
 
+// Store Players
+
 
 const STORE_KEY_PLAYERS = "players"
-interface Store {
+const STORE_KEY_GAMELIB = "gameLibrary"
+interface StorePlayersState {
 	players: Player[]
 }
-interface StoreActions {
+interface StorePlayersActions {
 	addPlayer: (newPlayer: Player) => void
 	removePlayer: (playerID: string) => void
 	editPlayer: (playerID: string, newName: string) => void
 	savePlayers: (players: Player[]) => void
 }
 
-export const storePlayers = create<Store & StoreActions>((set) => ({
-	players: JSON.parse(localStorage.getItem('players') || "[]"),
+export const storePlayers = create<StorePlayersState & StorePlayersActions>((set) => ({
+	players: JSON.parse(localStorage?.getItem(STORE_KEY_PLAYERS) || "[]"),
 
 	addPlayer: (newPlayer) => {
 		set((state) => {
@@ -91,5 +100,60 @@ export const storePlayers = create<Store & StoreActions>((set) => ({
 		return { players: updatePlayers }
 	}),
 
+
 	savePlayers: (players) => localStorage.setItem(STORE_KEY_PLAYERS, JSON.stringify(players))
+}))
+
+
+// store Game Library
+
+interface StoreGameLibState {
+	gameLib: Map<string, Game>
+}
+
+interface StoreGameLibActions {
+	addGame: (gameID: string, newGame: Game) => void
+	removeGame: (gameID: string) => void
+	updateGame: (gameID: string, game: Game) => void
+	saveGameLib: (gameLib: Map<string, Game>) => void
+}
+
+export const storeGameLib = create<StoreGameLibState & StoreGameLibActions>((set) => ({
+	gameLib: new Map(JSON.parse(localStorage?.getItem(STORE_KEY_GAMELIB) || '[]')),
+
+	addGame: (id, newGame) => {
+		set(state => {
+
+			let updateGameLib = new Map(state.gameLib).set(id, newGame);
+			state.saveGameLib(updateGameLib)
+
+			return { gameLib: updateGameLib }
+		})
+	},
+
+	removeGame: (id) => {
+		set(state => {
+
+			let updateGameLib = new Map(state.gameLib);
+			updateGameLib.delete(id);
+			state.saveGameLib(updateGameLib)
+
+			return { gameLib: updateGameLib }
+		})
+	},
+
+	updateGame: (id, game) => {
+		set(state => {
+
+			let updateGameLib = new Map(state.gameLib);
+			updateGameLib.set(id, game);
+			state.saveGameLib(updateGameLib)
+
+			return { gameLib: updateGameLib }
+		})
+	},
+
+	saveGameLib: (GameLib) => {
+		localStorage.setItem(STORE_KEY_GAMELIB, JSON.stringify(GameLib))
+	}
 }))
