@@ -1,4 +1,18 @@
+// react / next
 import React from "react";
+
+// types and variable imports
+import {
+  CONDITIONS_GameIsFinished,
+  CONDITIONS_ScoreBy,
+  GameOptions,
+  defaultSettings,
+} from "@/app/functions/gamelogic/defaultSettings";
+
+// store
+import { useGameSettingsStore } from "@/store/gameSettingsStore";
+
+// components
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "./button";
@@ -8,13 +22,8 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useGameSettingsStore } from "@/store";
-import {
-  CONDITIONS_GameIsFinished,
-  CONDITIONS_ScoreBy,
-  GameOptions,
-  defaultSettings,
-} from "@/app/functions/gamelogic/defaultSettings";
+
+// utils
 import createConditions from "@/app/functions/utils/createConditions";
 import createRuleString from "@/app/functions/utils/createRuleString";
 

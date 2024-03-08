@@ -1,18 +1,29 @@
 "use client";
 
+// react/next
+import { FormEvent, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+
+// types
 import { ActivePlayer, Game, PlayGame } from "@/app/functions/gamelogic/types";
-import { storeGameLib, storePlayers, useStoreTable } from "@/store";
+
+// stores
+import { useStoreTable } from "@/store/tablesStore";
+import { storeGameLib } from "@/store/gameLibraryStore";
+import { storePlayers } from "@/store/playersStore";
+
+// components
 import SearchGames from "@/components/searchGames";
 import { Button } from "@/components/ui/button";
 import GameRule from "@/components/ui/gameRule";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { FormEvent, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
-import { v4 as uuidv4 } from "uuid";
 import { LucideX } from "lucide-react";
+
+// utils
+import { v4 as uuidv4 } from "uuid";
 
 function Table({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -40,12 +51,9 @@ function Table({ params }: { params: { id: string } }) {
   );
 
   useEffect(() => {
-    console.log(players);
-
     let newTable: PlayGame | undefined = tablesState.get(id);
-
-    if (!newTable) return;
-
+		if (!newTable) return;
+		
     setGame(() => newTable?.game as Game | null);
     updatePlayerList(newTable.players);
   }, []);

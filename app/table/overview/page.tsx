@@ -1,13 +1,22 @@
 "use client";
 
-import { Game, PlayGame, Player } from "@/app/functions/gamelogic/types";
-import { storeGameLib, useGameSettingsStore } from "@/store";
+// react / next
+
+import dynamic from "next/dynamic";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+// types
+import { PlayGame, Player } from "@/app/functions/gamelogic/types";
+
+// store
+import { storeGameLib } from "@/store/gameLibraryStore";
+import { useGameSettingsStore } from "@/store/gameSettingsStore";
+
+// components
 import { Button } from "@/components/ui/button";
 import GameRule from "@/components/ui/gameRule";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
-import dynamic from "next/dynamic";
+
 
 function Overview({ params }: any) {
   let savedPlayers;
@@ -23,7 +32,6 @@ function Overview({ params }: any) {
   const router = useRouter();
 
   const gameLib = storeGameLib((state) => state.gameLib);
-  // let game = gameID ? gameLib.get(gameID) : null;
   const { game, updateGameState, resetToDefault } = useGameSettingsStore(
     (state) => state
   );
@@ -55,6 +63,7 @@ function Overview({ params }: any) {
       players: playersScore,
       game,
       rounds: 0,
+      gameFinished: false,
     };
 
     localStorage.setItem(table.id, JSON.stringify(table));
@@ -70,8 +79,14 @@ function Overview({ params }: any) {
           <>
             <h2>Game rules</h2>
             {Object.entries(game.options).map(
-              ([ruleKey, { active }], index) =>
-                active && <GameRule ruleKey={ruleKey} key={index} />
+              ([ruleKey, { active, conditions }], index) =>
+                active && (
+                  <GameRule
+                    rule={ruleKey}
+                    conditions={conditions}
+                    key={index}
+                  />
+                )
             )}
           </>
         )}

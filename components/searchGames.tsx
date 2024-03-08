@@ -1,11 +1,18 @@
 "use client";
+// react
 import React, { useEffect, useState } from "react";
+
+// types
 import { Game } from "@/app/functions/gamelogic/types";
+
+// store 
+import { storeGameLib } from "@/store/gameLibraryStore";
+
+// components
 import { Input } from "./ui/input";
 import { Search } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
-import { storeGameLib } from "@/store";
 
 export default function SearchGames({ selectGame }: { selectGame: any }) {
   const gameLib = Array.from(storeGameLib((state) => state.gameLib).values());

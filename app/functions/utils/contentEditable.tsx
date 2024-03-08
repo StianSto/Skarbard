@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input";
-import { useGameSettingsStore } from "@/store";
+import { useGameSettingsStore } from "@/store/gameSettingsStore";
 
 export default function ContentEditable(
   rule: string,

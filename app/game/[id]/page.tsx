@@ -1,11 +1,21 @@
 "use client";
 
+// react / next
+import React, { useEffect, useState } from "react";
+
+// store
+import { storeGameLib } from "@/store/gameLibraryStore";
+import { useGameSettingsStore } from "@/store/gameSettingsStore";
+
+// types and variable imports
+import { Game } from "../../functions/gamelogic/types";
+import { defaultSettings } from "@/app/functions/gamelogic/defaultSettings";
+
+// components
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import GameRule from "@/components/ui/gameRule";
-
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -13,9 +23,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { storeGameLib, useGameSettingsStore } from "../../../store";
-import { Game } from "../../functions/gamelogic/types";
-import { defaultSettings } from "@/app/functions/gamelogic/defaultSettings";
+
 
 export default function GameByID({ params }: { params: { id: string } }) {
   const id = params.id;

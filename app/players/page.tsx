@@ -1,5 +1,12 @@
 "use client";
 
+// react
+import { useState } from "react";
+
+// store
+import { storePlayers } from "@/store/playersStore";
+
+// components
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,9 +17,6 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import Link from "next/link";
-import { useState } from "react";
-import { storePlayers } from "../../store";
 import { LucideX } from "lucide-react";
 
 export default function SetTable() {

@@ -1,7 +1,13 @@
 "use client";
 
+// react
+import React, { useState } from "react";
+
+// types
+import { ActivePlayer } from "@/app/functions/gamelogic/types";
+
+// components
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
-import { handleGameState } from "@/app/functions/gamelogic";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -10,8 +16,9 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
-import { ActivePlayer } from "@/app/functions/gamelogic/types";
+
+// utils
+import { handleGameState } from "@/app/functions/gamelogic";
 
 export default function PlayGame({ params }: { params: { id: string } }) {
   // get table from localstorage
