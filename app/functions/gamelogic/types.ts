@@ -6,8 +6,8 @@ export type Player = {
 }
 
 export interface ActivePlayer extends Player {
-	total: number,
-	points: number[]
+	total?: number,
+	points?: number[]
 }
 
 export type Game = {
@@ -20,6 +20,7 @@ export type Game = {
 export type PlayGame = {
 	id: string,
 	rounds: number,
-	game: Game
+	game: Game | null,
 	players: ActivePlayer[],
+	gameFinished: boolean
 }

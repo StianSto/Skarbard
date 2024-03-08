@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Input } from "./input";
 import { Button } from "./button";
 import {
   DropdownMenu,
@@ -10,90 +9,43 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useGameSettingsStore } from "@/store";
-import { GameOptions } from "@/app/functions/gamelogic/defaultSettings";
+import {
+  CONDITIONS_GameIsFinished,
+  CONDITIONS_ScoreBy,
+  GameOptions,
+  defaultSettings,
+} from "@/app/functions/gamelogic/defaultSettings";
+import createConditions from "@/app/functions/utils/createConditions";
+import createRuleString from "@/app/functions/utils/createRuleString";
 
 export default function GameRule({
-  ruleKey,
+  rule,
+  conditions,
   editable = false,
 }: {
-  ruleKey: string;
+  rule: string;
+  conditions: CONDITIONS_GameIsFinished | CONDITIONS_ScoreBy;
   editable?: boolean;
 }) {
-  const rule = useGameSettingsStore(
-    (state) => state.game.options[ruleKey as keyof GameOptions]
-  );
-  const updateRule = useGameSettingsStore((state) => state.updateRule);
-  const conditions = rule?.conditions;
-  const updateCondition = useGameSettingsStore(
-    (state) => state.updateCondition
+  const { updateRule, updateCondition } = useGameSettingsStore(
+    (state) => state
   );
 
-  function ContentEditable([condition, value = "n"]: [string, any]) {
-    if (!value && value != 0) value = "";
+  const defaultRule = defaultSettings[rule as keyof GameOptions];
+  const defaultConditions = defaultRule?.conditions;
 
-    return (
-      <span className="inline-flex mx-1 font-bold">
-        {editable ? (
-          <Input
-            onChange={(e) => (value = e.target.value)}
-            onBlur={(e) => {
-              updateCondition(ruleKey, condition, e.target.value);
-            }}
-            type="tel"
-            defaultValue={value}
-            name={condition}
-            className={`inline min-w-0 w-14 py-1 h-fit text-center bg-slate-100`}
-            size={2}
-          />
-        ) : (
-          value
-        )}
-      </span>
-    );
-  }
+  conditions = {
+    ...defaultConditions,
+    ...conditions,
+  };
 
-  function createConditions(conditions: [string, any], editable = false) {
-    switch (conditions[0]) {
-      case "afterXTurns":
-        return <>After{ContentEditable(conditions)}turns</>;
-
-      case "afterXTime":
-        return <>After{ContentEditable(conditions)}minutes</>;
-
-      case "whenAPlayerGetsXPoints":
-        return <>When a player has over{ContentEditable(conditions)}points</>;
-
-      case "mostPoints":
-        return `Player with most points`;
-
-      case "fewestPoints":
-        return `Player with fewest points`;
-
-      default:
-        return "could not find condition";
-    }
-  }
-
-  function createRule(rule: string) {
-    switch (rule) {
-      case "gameIsFinished":
-        return "Game Ends";
-
-      case "scoreBy":
-        return `Winner is`;
-
-      default:
-        break;
-    }
-  }
-
-  // COMPONENT
   return (
     <Card className="w-full max-w-md p-4 relative">
       <CardHeader className="text-lg font-bold p-0">
-        {createRule(ruleKey)}
+        {createRuleString(rule)}
       </CardHeader>
       <Separator />
+
       <CardContent className="text-base p-0 mt-2">
         <ul className="flex flex-col gap-3">
           {conditions &&
@@ -109,14 +61,14 @@ export default function GameRule({
                           size={"sm"}
                           className={"h-0 py-3"}
                           onClick={() =>
-                            updateCondition(ruleKey, condition[0], undefined)
+                            updateCondition(rule, condition[0], undefined)
                           }
                         >
                           -
                         </Button>
                       )}
 
-                      <p>{createConditions(condition, editable)}</p>
+                      <p>{createConditions(rule, condition)}</p>
                     </div>
                   </li>
                 )
@@ -144,15 +96,11 @@ export default function GameRule({
                             // @ts-ignore
                             let checkedState = e.target?.dataset.state;
                             checkedState === "unchecked"
-                              ? updateCondition(ruleKey, condition[0], "n")
-                              : updateCondition(
-                                  ruleKey,
-                                  condition[0],
-                                  undefined
-                                );
+                              ? updateCondition(rule, condition[0], "n")
+                              : updateCondition(rule, condition[0], undefined);
                           }}
                         >
-                          {createConditions(condition, editable)}
+                          {createConditions(rule, condition, editable)}
                         </DropdownMenuCheckboxItem>
                       )
                   )}
@@ -161,9 +109,10 @@ export default function GameRule({
           </div>
         )}
       </CardContent>
+
       {editable && (
         <Button
-          onClick={() => updateRule(ruleKey, false)}
+          onClick={() => updateRule(rule, false)}
           variant={"destructive"}
           className="absolute -top-3 -right-3 hover size-10 p-1"
         >

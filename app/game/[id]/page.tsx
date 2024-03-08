@@ -13,60 +13,30 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { useGameSettingsStore } from "../../../store";
+import { storeGameLib, useGameSettingsStore } from "../../../store";
 import { Game } from "../../functions/gamelogic/types";
 import { defaultSettings } from "@/app/functions/gamelogic/defaultSettings";
 
 export default function GameByID({ params }: { params: { id: string } }) {
   const id = params.id;
 
-  const game = useGameSettingsStore((state) => state.game);
-  const updateGameState = useGameSettingsStore(
-    (state) => state.updateGameState
-  );
-  const updateRule = useGameSettingsStore((state) => state.updateRule);
-  const options = useGameSettingsStore((state) => state.game.options);
-  const [gameLib, setGameLib] = useState<Map<string, Game>>(new Map());
-  const updateTitle = useGameSettingsStore((state) => state.updateTitle);
-  const title = game.title;
+  const { gameLib, addGame } = storeGameLib((state) => state);
+  const { game, updateRule, updateTitle, updateGameState } =
+    useGameSettingsStore((state) => state);
+
+  const initGame: Game = gameLib?.get(id) || {
+    id,
+    title: "",
+    options: defaultSettings,
+  };
 
   useEffect(() => {
-    initGame();
-  }, []);
-
-  function initGame() {
-    let localGamesLibrary = localStorage.getItem("gameLibrary");
-    let gameLibMap;
-
-    if (localGamesLibrary) {
-      gameLibMap = new Map(JSON.parse(localGamesLibrary));
-    } else {
-      localStorage.setItem(
-        "gameLibrary",
-        JSON.stringify(Array.from(gameLib.entries()))
-      );
-      gameLibMap = new Map();
-    }
-
-    setGameLib(gameLibMap);
-    const updateGame = gameLibMap.get(id);
-
-    updateGame
-      ? updateGameState(updateGame)
-      : updateGameState({
-          id,
-          title,
-          options: defaultSettings,
-        });
-  }
+    updateGameState(initGame);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameLib]);
 
   function saveGame() {
-    setGameLib((prevGameLib) => prevGameLib.set(id, game));
-
-    localStorage.setItem(
-      "gameLibrary",
-      JSON.stringify(Array.from(gameLib.entries()))
-    );
+    addGame(id, game);
   }
 
   return (
@@ -76,7 +46,7 @@ export default function GameByID({ params }: { params: { id: string } }) {
         <Input
           type="text"
           placeholder="Game Title"
-          value={title}
+          value={game.title}
           onChange={(e) => updateTitle(e.target.value)}
           className="bg-white text-black"
         />
@@ -90,7 +60,7 @@ export default function GameByID({ params }: { params: { id: string } }) {
               <Button variant={"outline"}>Add a Rule</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align={"start"}>
-              {Object.entries(options).map(
+              {Object.entries(game.options).map(
                 // not yet selected elements, visible to user when selecting
                 ([ruleKey, { active }], index) =>
                   !active && (
@@ -115,10 +85,15 @@ export default function GameByID({ params }: { params: { id: string } }) {
         </div>
 
         <div className="flex flex-col gap-2 my-2">
-          {Object.entries(options).map(
-            ([rule, { active }], index) =>
+          {Object.entries(game.options).map(
+            ([rule, { active, conditions }], index) =>
               active && (
-                <GameRule key={index} ruleKey={rule} editable={true}></GameRule>
+                <GameRule
+                  key={index}
+                  rule={rule}
+                  conditions={conditions}
+                  editable={true}
+                ></GameRule>
               )
           )}
         </div>
