@@ -78,3 +78,7 @@
 .logo {
   filter: drop-shadow(2px 4px 5px rgba(0, 0, 0, 0.4));
 }
+
+.scoreboard-bar {
+  transition: width 300ms 200ms ease-in-out;
+}

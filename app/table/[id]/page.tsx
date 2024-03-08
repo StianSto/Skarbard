@@ -40,7 +40,7 @@ function Table({ params }: { params: { id: string } }) {
   const [game, setGame] = useState<Game | null>(null);
   const { tablesState, addTable } = useStoreTable((state) => state);
 
-  const [table, setTable] = useState<PlayGame>(
+  const [table, setTable] = useState(
     tablesState.get(id) || {
       id,
       game: null,
@@ -52,8 +52,8 @@ function Table({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     let newTable: PlayGame | undefined = tablesState.get(id);
-		if (!newTable) return;
-		
+    if (!newTable) return;
+
     setGame(() => newTable?.game as Game | null);
     updatePlayerList(newTable.players);
   }, []);

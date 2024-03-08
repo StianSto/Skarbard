@@ -1,10 +1,10 @@
 "use client";
 
 // react
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // types
-import { ActivePlayer } from "@/app/functions/gamelogic/types";
+import { ActivePlayer, PlayGame } from "@/app/functions/gamelogic/types";
 
 // components
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
@@ -19,22 +19,32 @@ import { Input } from "@/components/ui/input";
 
 // utils
 import { handleGameState } from "@/app/functions/gamelogic";
+import { useStoreTable } from "@/store/tablesStore";
 
-export default function PlayGame({ params }: { params: { id: string } }) {
-  // get table from localstorage
+export default function Play({ params }: { params: { id: string } }) {
+  const { tablesState, addTable } = useStoreTable((state) => state);
 
-  let fetchTable = "";
-  if (typeof window !== "undefined")
-    fetchTable = localStorage.getItem(params.id) || "";
+  const table = tablesState.get(params.id) as PlayGame;
 
-  // states
-  const [table, setTable] = useState(JSON.parse(fetchTable));
-  const [turns, setTurns] = useState(table.rounds);
+  const [turns, setTurns] = useState(table?.rounds);
   const [currentTurn, setCurrentTurn] = useState(turns);
   const [gameFinished, setGameFinished] = useState(false);
-  const [activePlayers, setActivePlayers] = useState<ActivePlayer[]>(
-    table.players
-  );
+  const [activePlayers, setActivePlayers] = useState<ActivePlayer[]>([
+    ...table.players,
+  ]);
+  const [highestScore, setHighestScore] = useState(0);
+
+  useEffect(() => {
+    updateHighScore();
+  }, [table, activePlayers]);
+
+  const updateHighScore = () => {
+    const highScore = table.players.reduce((prev, current) => {
+      if (current.total > prev.total) return current;
+      return prev;
+    });
+    setHighestScore(() => highScore.total);
+  };
 
   // update table when turn is completed
   const completeTurn = () => {
@@ -47,15 +57,20 @@ export default function PlayGame({ params }: { params: { id: string } }) {
     if (table) setGameFinished(handleGameState(table));
   };
 
+  const updateTurn = () => {
+    updateTable();
+  };
+
   const updateTable = () => {
-    const newTable = {
+    const newTable: PlayGame = {
       id: table.id,
       rounds: turns,
       game: table.game,
       players: activePlayers,
+      gameFinished,
     };
 
-    setTable(newTable);
+    addTable(newTable);
     localStorage.setItem(table.id, JSON.stringify(newTable));
   };
 
@@ -67,11 +82,36 @@ export default function PlayGame({ params }: { params: { id: string } }) {
       player.total = player.points.reduce(
         (sum: number, current: number) => sum + current
       );
+      player.total > highestScore
+        ? setHighestScore(() => points)
+        : updateHighScore();
       return player;
     });
 
     setActivePlayers(updateScoreboard);
   };
+
+  function Bar({
+    score,
+    children,
+  }: {
+    score: number;
+    highestScore: number;
+    children: React.ReactNode;
+  }) {
+    let size: number;
+    size = highestScore === 0 ? (size = 1) : (size = score / highestScore);
+    if (size > 1) size = 1;
+
+    return (
+      <p
+        className={`px-4 py-2 rounded rounded-s-none bg-cyan-700 flex justify-between scoreboard-bar`}
+        style={{ width: size * 100 + "%" }}
+      >
+        {children}
+      </p>
+    );
+  }
 
   return (
     <main>
@@ -81,20 +121,31 @@ export default function PlayGame({ params }: { params: { id: string } }) {
         <h3>Game Is Finished</h3>
       ) : (
         <>
-          <div>play this game</div>
-          <div className="flex flex-wrap gap-2">
-            {activePlayers.map((player) => (
-              <p key={player.id} className="px-4 py-2 rounded bg-cyan-700">
-                {player.name}: {player.total}
-              </p>
-            ))}
-          </div>
+          <div>playing {table.game?.title}</div>
 
+          {/* scoreboard screen */}
+          <section className="my-4 w-4/5">
+            <ul className="flex flex-col gap-4">
+              {table.players.map((player) => (
+                <Bar
+                  key={player.id}
+                  score={player.total}
+                  highestScore={highestScore}
+                >
+                  <span>{player.name}</span>
+                  <span>{player.total}</span>
+                </Bar>
+              ))}
+            </ul>
+          </section>
+
+          {/* <div className="flex flex-wrap gap-2">
+          </div> */}
+
+          {/* register points drawer */}
           <Drawer>
-            <DrawerTrigger>
-              <Button>Register Points</Button>
-            </DrawerTrigger>
-            <DrawerContent className="pb-4 flex justify-center items-center">
+            <DrawerTrigger>Register Points</DrawerTrigger>
+            <DrawerContent className="pb-4 flex justify-center items-center rounded-none border-none bg-white text-black">
               <div className="flex flex-col items-center max-w-md w-full gap-2">
                 <DrawerHeader className="mx-auto grid grid-cols-3 w-full place-items-center">
                   {currentTurn > 0 && (
@@ -120,7 +171,7 @@ export default function PlayGame({ params }: { params: { id: string } }) {
                     <p className="flex-1 w-100">{player.name}</p>
                     <Input
                       type="number"
-                      className="flex-0 inline text-center w-16"
+                      className="flex-0 inline text-center w-16 bg-slate-100"
                       value={player.points[currentTurn] ?? ""}
                       onChange={(e) =>
                         addpoints(
@@ -139,9 +190,10 @@ export default function PlayGame({ params }: { params: { id: string } }) {
                     if (player.points[currentTurn] === 0) return false;
                     if (!player.points[currentTurn]) return true;
                   })}
-                  onClick={completeTurn}
+                  onClick={currentTurn === turns ? completeTurn : updateTurn}
                 >
-                  Complete Turn {currentTurn}
+                  {currentTurn === turns ? "Complete Turn " : "Update Turn "}
+                  {currentTurn + 1}
                 </Button>
               </div>
             </DrawerContent>

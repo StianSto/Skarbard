@@ -29,7 +29,7 @@ export default function RootLayout({
       lang="en"
       className={` font-sans ${inter.variable} ${luckiestGuy.variable}`}
     >
-      <body className="px-8 h-dvh">{children}</body>
+      <body className="h-dvh">{children}</body>
     </html>
   );
 }
