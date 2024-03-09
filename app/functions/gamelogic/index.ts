@@ -27,7 +27,7 @@ export function handleGameState(table: PlayGame) {
 		let pointLimit = xPoints ?? 0
 		players.forEach((player: any) => {
 
-			if (player.total = pointLimit) isGameFinished = true
+			if (player.total >= pointLimit) isGameFinished = true
 		});
 
 	}
