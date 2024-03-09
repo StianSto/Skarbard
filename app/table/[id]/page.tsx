@@ -82,36 +82,29 @@ function Table({ params }: { params: { id: string } }) {
     setNewPlayer("");
   }
 
-  function saveTable() {
-    setTable((state) => {
-      state.game = game ? game : null;
-      return state;
-    });
-
-    setTable((state) => {
-      const playersScore: ActivePlayer[] = players.map((player) => {
-        return {
-          id: player.id,
-          name: player.name,
-          total: 0,
-          points: [],
-        };
-      });
-
-      state.players = playersScore;
-      return state;
-    });
-  }
-
   function createTable() {
     if (!table) return;
     if (!game) return;
     if (!players) return;
 
     setCreatingTable("saving Table");
-    saveTable();
 
-    addTable(table as PlayGame);
+    const playersScore: ActivePlayer[] = players.map((player) => {
+      return {
+        id: player.id,
+        name: player.name,
+        total: 0,
+        points: [],
+      };
+    });
+
+    addTable({
+      game,
+      gameFinished: false,
+      id,
+      players: playersScore,
+      rounds: 0,
+    });
     setCreatingTable("Creating Table");
 
     router.push("/play/" + table.id);

@@ -77,7 +77,7 @@ export default function GameRule({
                         </Button>
                       )}
 
-                      <p>{createConditions(rule, condition)}</p>
+                      <p>{createConditions(rule, condition, editable)}</p>
                     </div>
                   </li>
                 )

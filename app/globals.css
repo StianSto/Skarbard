@@ -82,3 +82,27 @@
 .scoreboard-bar {
   transition: width 300ms 200ms ease-in-out;
 }
+
+/* hide numbers on certain input elements */
+.hide-numbers::-webkit-outer-spin-button,
+.hide-numbers::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.hide-numbers[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.text-stroke {
+  --text-stroke-width: 1px;
+  --text-stroke-color: var(--border);
+  --text-stroke-fill: currentColor;
+
+  -webkit-text-fill-color: var(--text-stroke-fill);
+  -webkit-text-stroke: var(--text-stroke-width) black;
+}
+
+.text-shadow {
+}
