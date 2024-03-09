@@ -4,10 +4,11 @@ import { PlayGame } from "./types";
 // if game is finished, calculate winner and results.
 
 export function handleGameState(table: PlayGame) {
+	let isGameFinished = false
+	if (!table.game) return isGameFinished
 	const gameRules = table.game.options;
 	const turns = table.rounds;
 	const players = table.players
-	let isGameFinished = false
 
 	if (gameRules.gameIsFinished.active) {
 		let conditions = gameRules.gameIsFinished.conditions
@@ -26,7 +27,7 @@ export function handleGameState(table: PlayGame) {
 		let pointLimit = xPoints ?? 0
 		players.forEach((player: any) => {
 
-			if (player.total >= pointLimit) isGameFinished = true
+			if (player.total = pointLimit) isGameFinished = true
 		});
 
 	}

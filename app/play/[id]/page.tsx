@@ -21,6 +21,7 @@ import { handleGameState } from "@/app/functions/gamelogic";
 import { useStoreTable } from "@/store/tablesStore";
 import { Input } from "@/components/ui/input";
 import playerColors from "@/lib/playerColors";
+import Link from "next/link";
 
 export default function Play({ params }: { params: { id: string } }) {
   // find table from storage, if not redirect
@@ -39,7 +40,7 @@ export default function Play({ params }: { params: { id: string } }) {
   // table states
   const [turns, setTurns] = useState(table.rounds);
   const [currentTurn, setCurrentTurn] = useState(table.rounds);
-  const [gameFinished, setGameFinished] = useState(false);
+  const [gameFinished, setGameFinished] = useState(table.gameFinished);
   const [activePlayers, setActivePlayers] = useState<ActivePlayer[]>(
     table.players
   );
@@ -53,6 +54,10 @@ export default function Play({ params }: { params: { id: string } }) {
       setPanelDirection(windowResizeHandler);
     });
   }, []);
+
+  useEffect(() => {
+    updateTable();
+  }, [gameFinished]);
 
   function windowResizeHandler() {
     if (!autoLayout) return panelDirection;
@@ -132,10 +137,13 @@ export default function Play({ params }: { params: { id: string } }) {
   return (
     <main className="h-full font-lucky">
       {gameFinished ? (
-        <>
-          <h2 className="text-center text-6xl font-lucky">SKÅRBÅRD</h2>
-          <h3 className="mx-4">Game Is Finished</h3>
-        </>
+        <section className="flex flex-col items-center pt-8 gap-10 h-full">
+          <h2 className="text-6xl font-lucky">SKÅRBÅRD</h2>
+          <h3 className="mx-4 text-3xl">Game Is Finished</h3>
+          <Button variant={"outline"} className="font-sans font-bold ">
+            <Link href={"/results/" + table.id}>View Results</Link>
+          </Button>
+        </section>
       ) : (
         table && (
           <>
