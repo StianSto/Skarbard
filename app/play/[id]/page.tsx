@@ -122,15 +122,16 @@ export default function Play({ params }: { params: { id: string } }) {
   }) {
     let size: number;
     size = highestScore === 0 ? (size = 1) : (size = score / highestScore);
-    if (size > 1) size = 1;
 
     return (
-      <p
-        className={`px-4 py-2 rounded rounded-s-none bg-slate-100 text-black font-bold outline-bold flex justify-between scoreboard-bar min-w-[40%]`}
-        style={{ width: size * 100 + "%" }}
-      >
-        {children}
-      </p>
+      <>
+        <p
+          className={`px-1 py-2 rounded rounded-s-none bg-white text-black font-bold outline-bold scoreboard-bar text-right relative -translate-x-1`}
+          style={{ width: size * 100 + "%" }}
+        >
+          {children}
+        </p>
+      </>
     );
   }
 
@@ -161,26 +162,28 @@ export default function Play({ params }: { params: { id: string } }) {
                   {table?.game?.title}
                 </h3>
                 <section className="my-3 md:mt-12 w-4/5 flex-1">
-                  <ul className="flex flex-col gap-4">
+                  <div className="gap-4 grid grid-cols-2 gap-x-0 ">
                     {table?.players.map((player, index) => (
-                      <li key={player.id}>
+                      <>
+                        <p
+                          className="text-stroke bg-white py-2 ps-4"
+                          style={{
+                            color: `${
+                              playerColors[index % playerColors.length]
+                            }`,
+                          }}
+                          property="--var(--text-stroke-color): blue"
+                        >
+                          {player.name}
+                        </p>
                         <Bar score={player.total} highestScore={highestScore}>
-                          <span
-                            className="text-stroke"
-                            style={{
-                              color: `${
-                                playerColors[index % playerColors.length]
-                              }`,
-                            }}
-                            property="--var(--text-stroke-color): blue"
-                          >
-                            {player.name}
+                          <span className="px-4 absolute top-1/2 right-0 -translate-y-1/2">
+                            {player.total}
                           </span>
-                          <span>{player.total}</span>
                         </Bar>
-                      </li>
+                      </>
                     ))}
-                  </ul>
+                  </div>
                 </section>
               </ResizablePanel>
               <ResizableHandle withHandle />
@@ -219,7 +222,7 @@ export default function Play({ params }: { params: { id: string } }) {
                           <p className="flex-1 w-100">{player.name}</p>
                           <Input
                             type="number"
-                            className="flex-0 inline text-center w-16 bg-slate-100 hide-numbers"
+                            className="flex-0 inline text-center w-16 bg-slate-100 hide-numbers text-base"
                             value={player.points[currentTurn] ?? ""}
                             onChange={(e) =>
                               addpoints(
