@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="h-full flex flex-col items-center justify-between p-8">
+    <main className="h-full flex flex-col items-center justify-between p-8 px-4">
       <h1 className="w-full max-w-md logo" aria-label="Skårbård">
         <Image
           width={500}

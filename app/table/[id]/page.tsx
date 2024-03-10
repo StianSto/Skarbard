@@ -111,7 +111,7 @@ function Table({ params }: { params: { id: string } }) {
   }
 
   return (
-    <main className="py-8 mx-auto max-w-md flex flex-col flex-1 h-screen">
+    <main className="py-8 px-4 mx-auto max-w-md flex flex-col flex-1">
       <h1 className="font-lucky text-center text-4xl">Set Table</h1>
       <nav className="mt-2">
         <div className="flex font-lucky">
@@ -133,7 +133,7 @@ function Table({ params }: { params: { id: string } }) {
           </Button>
 
           <Button
-            className={`text-center font-bold text-2xl flex-1 p-0 hover:opacity-100 rounded-s-none ${
+            className={`text-center font-bold text-2xl flex-1 rounded-s-none ${
               multistep !== "players" ? "opacity-50" : null
             }`}
             onClick={() => setMultistep("players")}
