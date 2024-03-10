@@ -22,6 +22,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import createRuleString from "@/app/functions/utils/createRuleString";
 
 export default function GameByID({ params }: { params: { id: string } }) {
   const id = params.id;
@@ -82,7 +83,7 @@ export default function GameByID({ params }: { params: { id: string } }) {
                           : updateRule(ruleKey, false);
                       }}
                     >
-                      {ruleKey}
+                      {createRuleString(ruleKey)}
                     </DropdownMenuCheckboxItem>
                   )
               )}
