@@ -3,10 +3,10 @@ import { useGameSettingsStore } from "@/store/gameSettingsStore";
 
 export default function ContentEditable(
   rule: string,
-  [condition, value = "n"]: [string, any],
+  [condition, value = "n"]: [string, string],
   editable = false
 ) {
-  if (!value && value != 0) value = "";
+  if (!value && value != "0") value = "";
 
   const { updateRule, updateCondition } = useGameSettingsStore(
     (state) => state
@@ -24,7 +24,7 @@ export default function ContentEditable(
             type="tel"
             defaultValue={value}
             name={condition}
-            className={`inline min-w-0 w-14 py-1 h-fit text-center bg-slate-100`}
+            className={`inline min-w-0 w-14 py-1 h-fit text-center bg-slate-100 text-md`}
             size={2}
           />
         ) : (

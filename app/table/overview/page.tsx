@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import GameRule from "@/components/ui/gameRule";
 import Link from "next/link";
 
-
 function Overview({ params }: any) {
   let savedPlayers;
   let players: Player[] = [];
@@ -71,7 +70,7 @@ function Overview({ params }: any) {
   }
 
   return (
-    <main className="py-8 mx-auto max-w-md flex flex-col flex-1 h-screen">
+    <main className="py-8 mx-auto max-w-md flex flex-col flex-1">
       <h1 className="font-lucky">Overview</h1>
       <section className="mt-4">
         <h2>Game: {game ? game.title : <i>choose a game</i>}</h2>

@@ -23,8 +23,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-
-
 export default function GameByID({ params }: { params: { id: string } }) {
   const id = params.id;
 
@@ -48,7 +46,7 @@ export default function GameByID({ params }: { params: { id: string } }) {
   }
 
   return (
-    <main className="py-8 mx-auto max-w-md flex flex-col flex-1 h-screen">
+    <main className="py-8 px-4 mx-auto max-w-md flex flex-col flex-1">
       <h1 className="font-lucky text-4xl">New Game</h1>
       <div className="max-w-md mb-4">
         <Input

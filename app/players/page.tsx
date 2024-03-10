@@ -35,7 +35,7 @@ export default function SetTable() {
   }
 
   return (
-    <main className="py-8 mx-auto max-w-md flex flex-col flex-1 h-screen">
+    <main className="py-8 mx-auto max-w-md flex flex-col flex-1">
       <h2>Players</h2>
       <ul className="flex flex-wrap gap-2">
         {players.map((player, index) => (
