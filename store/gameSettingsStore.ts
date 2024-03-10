@@ -1,8 +1,11 @@
 import { create } from 'zustand'
 import { produce } from 'immer'
-import { GameOptions, defaultSettings } from '../functions/gamelogic/defaultSettings'
-import { Game } from '../functions/gamelogic/types'
+import { GameOptions, defaultSettings } from '../app/functions/gamelogic/defaultSettings'
+import { Game } from '../app/functions/gamelogic/types'
 
+// Initialise a localstorage to avoid error on server side
+let localStorage: Storage;
+if (typeof window !== 'undefined') localStorage = window.localStorage
 
 interface GameState {
 	game: Game

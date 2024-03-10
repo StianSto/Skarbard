@@ -1,33 +1,45 @@
 "use client";
 
-import { Game, PlayGame, Player } from "@/app/functions/gamelogic/types";
-import { useGameSettingsStore } from "@/app/store";
+// react / next
+
+import dynamic from "next/dynamic";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+// types
+import { PlayGame, Player } from "@/app/functions/gamelogic/types";
+
+// store
+import { storeGameLib } from "@/store/gameLibraryStore";
+import { useGameSettingsStore } from "@/store/gameSettingsStore";
+
+// components
 import { Button } from "@/components/ui/button";
 import GameRule from "@/components/ui/gameRule";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
-export default function Overview({ params }: any) {
-  const savedPlayers = localStorage.getItem("players");
-  const players: Player[] = savedPlayers ? JSON.parse(savedPlayers) : [];
+
+function Overview({ params }: any) {
+  let savedPlayers;
+  let players: Player[] = [];
+  if (typeof window !== "undefined") {
+    savedPlayers = localStorage.getItem("players");
+    players = savedPlayers ? JSON.parse(savedPlayers) : [];
+  }
+
   const searchParams = useSearchParams();
-
   const gameID = searchParams?.get("game");
   const [creatingTable, setCreatingTable] = useState(false);
   const router = useRouter();
 
-  const gameLib = new Map<string, Game>(
-    JSON.parse(localStorage.getItem("gameLibrary") || "[]")
+  const gameLib = storeGameLib((state) => state.gameLib);
+  const { game, updateGameState, resetToDefault } = useGameSettingsStore(
+    (state) => state
   );
-  const game = gameID ? gameLib.get(gameID) : null;
-  const updateGameState = useGameSettingsStore(
-    (state) => state.updateGameState
-  );
-  const resetToDefault = useGameSettingsStore((state) => state.resetToDefault);
 
   useEffect(() => {
-    game ? updateGameState(game) : resetToDefault();
+    let updateGame = gameID ? gameLib.get(gameID) : null;
+    updateGame ? updateGameState(updateGame) : resetToDefault();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function createTable() {
@@ -51,6 +63,7 @@ export default function Overview({ params }: any) {
       players: playersScore,
       game,
       rounds: 0,
+      gameFinished: false,
     };
 
     localStorage.setItem(table.id, JSON.stringify(table));
@@ -66,8 +79,14 @@ export default function Overview({ params }: any) {
           <>
             <h2>Game rules</h2>
             {Object.entries(game.options).map(
-              ([ruleKey, { active }], index) =>
-                active && <GameRule ruleKey={ruleKey} key={index} />
+              ([ruleKey, { active, conditions }], index) =>
+                active && (
+                  <GameRule
+                    rule={ruleKey}
+                    conditions={conditions}
+                    key={index}
+                  />
+                )
             )}
           </>
         )}
@@ -92,3 +111,5 @@ export default function Overview({ params }: any) {
     </main>
   );
 }
+
+export default dynamic(() => Promise.resolve(Overview), { ssr: false });
