@@ -22,6 +22,13 @@ import { useStoreTable } from "@/store/tablesStore";
 import { Input } from "@/components/ui/input";
 import playerColors from "@/lib/playerColors";
 import Link from "next/link";
+import { Dialog } from "@radix-ui/react-dialog";
+import {
+  DialogClose,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import EndGame from "@/components/endGame";
 
 export default function Play({ params }: { params: { id: string } }) {
   // find table from storage, if not redirect
@@ -193,7 +200,7 @@ export default function Play({ params }: { params: { id: string } }) {
                 className={`bg-white`}
                 style={{ overflow: "auto" }}
               >
-                <section className="h-full py-2 flex flex-col items-center rounded-none border-none bg-white text-black max-w-md mx-auto ">
+                <section className="h-full my-2 flex flex-col items-center rounded-none border-none bg-white text-black max-w-md mx-auto ">
                   <div className="mx-auto grid grid-cols-3 w-full place-items-center my-8">
                     {currentTurn > 0 && (
                       <ChevronLeftIcon
@@ -236,21 +243,25 @@ export default function Play({ params }: { params: { id: string } }) {
                         </div>
                       ))}
 
-                    <Button
-                      disabled={activePlayers.some((player) => {
-                        if (player.points[currentTurn] === 0) return false;
-                        if (!player.points[currentTurn]) return true;
-                      })}
-                      onClick={
-                        currentTurn === turns ? completeTurn : updateTable
-                      }
-                      className="mb-6"
-                    >
-                      {currentTurn === turns
-                        ? "Complete Turn "
-                        : "Update Turn "}
-                      {currentTurn + 1}
-                    </Button>
+                    <div className="my-4 flex gap-4 justify-evenly w-full">
+                      {table.game?.options.gameIsFinished.active === false && (
+                        <EndGame setGameIsFinished={setGameFinished}></EndGame>
+                      )}
+                      <Button
+                        disabled={activePlayers.some((player) => {
+                          if (player.points[currentTurn] === 0) return false;
+                          if (!player.points[currentTurn]) return true;
+                        })}
+                        onClick={
+                          currentTurn === turns ? completeTurn : updateTable
+                        }
+                      >
+                        {currentTurn === turns
+                          ? "Complete Turn "
+                          : "Update Turn "}
+                        {currentTurn + 1}
+                      </Button>
+                    </div>
                   </div>
                 </section>
               </ResizablePanel>
