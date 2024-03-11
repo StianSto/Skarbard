@@ -20,9 +20,9 @@ import {
 import { handleGameState } from "@/app/functions/gamelogic";
 import { useStoreTable } from "@/store/tablesStore";
 import { Input } from "@/components/ui/input";
-import playerColors from "@/lib/playerColors";
 import Link from "next/link";
 import EndGame from "@/components/endGame";
+import Bar from "@/components/Bar";
 
 export default function Play({ params }: { params: { id: string } }) {
   // find table from storage, if not redirect
@@ -46,6 +46,7 @@ export default function Play({ params }: { params: { id: string } }) {
     table.players
   );
   const [highestScore, setHighestScore] = useState(0);
+  const [minScore, setMinScore] = useState(0);
 
   useEffect(() => {
     updateHighScore();
@@ -66,11 +67,16 @@ export default function Play({ params }: { params: { id: string } }) {
   }
 
   const updateHighScore = () => {
-    const highScore = table.players.reduce((prev, current) => {
-      if (current.total > prev.total) return current;
-      return prev;
+    let max = 0;
+    let min = 0;
+
+    table.players.forEach((player) => {
+      if (player.total > max) max = player.total;
+      if (player.total < min) min = player.total;
     });
-    setHighestScore(() => highScore.total);
+
+    setHighestScore(max);
+    setMinScore(min);
   };
 
   // update table when turn is completed
@@ -96,45 +102,29 @@ export default function Play({ params }: { params: { id: string } }) {
     addTable(newTable);
   };
 
-  const addpoints = (playerID: string, turn: number, points: number) => {
+  const addpoints = (playerID: string, turn: number, points: number | null) => {
+    if (!points && points !== 0) points = null;
+
     const updateScoreboard = activePlayers.map((player) => {
       if (player.id !== playerID) return player;
 
       player.points[turn] = points;
       player.total = player.points.reduce(
-        (sum: number, current: number) => sum + current
+        (sum: number, current: number | null) => {
+          if (!current) current = 0;
+          return sum + current;
+        },
+        0
       );
+
       player.total > highestScore
-        ? setHighestScore(() => points)
+        ? setHighestScore(player.total)
         : updateHighScore();
       return player;
     });
 
     setActivePlayers(updateScoreboard);
   };
-
-  function Bar({
-    score,
-    children,
-  }: {
-    score: number;
-    highestScore: number;
-    children: React.ReactNode;
-  }) {
-    let size: number;
-    size = highestScore === 0 ? (size = 1) : (size = score / highestScore);
-
-    return (
-      <>
-        <p
-          className={`px-1 py-2 rounded rounded-s-none bg-white text-black font-bold outline-bold scoreboard-bar text-right relative -translate-x-1`}
-          style={{ width: size * 100 + "%" }}
-        >
-          {children}
-        </p>
-      </>
-    );
-  }
 
   return (
     <main className="h-full font-lucky">
@@ -163,26 +153,16 @@ export default function Play({ params }: { params: { id: string } }) {
                   {table?.game?.title}
                 </h3>
                 <section className="my-3 md:mt-12 w-4/5 flex-1">
-                  <div className="gap-4 grid grid-cols-2 gap-x-0 ">
+                  <div className="gap-4 gap-x-0 ">
                     {table?.players.map((player, index) => (
-                      <>
-                        <p
-                          className="text-stroke bg-white py-2 ps-4"
-                          style={{
-                            color: `${
-                              playerColors[index % playerColors.length]
-                            }`,
-                          }}
-                          property="--var(--text-stroke-color): blue"
-                        >
-                          {player.name}
-                        </p>
-                        <Bar score={player.total} highestScore={highestScore}>
-                          <span className="px-4 absolute top-1/2 right-0 -translate-y-1/2">
-                            {player.total}
-                          </span>
-                        </Bar>
-                      </>
+                      <Bar
+                        index={index}
+                        playerName={player.name}
+                        playerScore={player.total}
+                        key={player.id}
+                        highScore={highestScore}
+                        minScore={minScore}
+                      />
                     ))}
                   </div>
                 </section>
@@ -224,12 +204,12 @@ export default function Play({ params }: { params: { id: string } }) {
                           <Input
                             type="number"
                             className="flex-0 inline text-center w-16 bg-slate-100 hide-numbers text-base"
-                            value={player.points[currentTurn] ?? ""}
+                            value={player.points[currentTurn] || ""}
                             onChange={(e) =>
                               addpoints(
                                 player.id,
                                 currentTurn,
-                                parseInt(e.target.value ?? "0")
+                                parseFloat(e.target.value)
                               )
                             }
                             required
