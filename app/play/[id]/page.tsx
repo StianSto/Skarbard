@@ -22,12 +22,6 @@ import { useStoreTable } from "@/store/tablesStore";
 import { Input } from "@/components/ui/input";
 import playerColors from "@/lib/playerColors";
 import Link from "next/link";
-import { Dialog } from "@radix-ui/react-dialog";
-import {
-  DialogClose,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import EndGame from "@/components/endGame";
 
 export default function Play({ params }: { params: { id: string } }) {

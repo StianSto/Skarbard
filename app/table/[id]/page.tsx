@@ -3,7 +3,7 @@
 // react/next
 import { FormEvent, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // types
 import { ActivePlayer, Game, PlayGame } from "@/app/functions/gamelogic/types";
@@ -28,6 +28,8 @@ import { v4 as uuidv4 } from "uuid";
 function Table({ params }: { params: { id: string } }) {
   const router = useRouter();
   const id = params.id;
+  const searchParams = useSearchParams();
+  const gameID = searchParams?.get("game");
 
   // "game" or "players"
   const [multistep, setMultistep] = useState("game");
@@ -37,7 +39,9 @@ function Table({ params }: { params: { id: string } }) {
   const { players, addPlayer, editPlayer, removePlayer, updatePlayerList } =
     storePlayers((state) => state);
   const gameLib = storeGameLib((state) => state.gameLib);
-  const [game, setGame] = useState<Game | null>(null);
+  const [game, setGame] = useState<Game | null>(
+    (gameID && gameLib.get(gameID)) || null
+  );
   const { tablesState, addTable } = useStoreTable((state) => state);
 
   const [table, setTable] = useState(
