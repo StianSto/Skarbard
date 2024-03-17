@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import React from "react";
 import { CONDITIONS_ScoreBy } from "@/app/functions/gamelogic/defaultSettings";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Results({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -54,7 +55,7 @@ export default function Results({ params }: { params: { id: string } }) {
         <div className="bg-gradient-to-b from-transparent to-secondary h-20 w-full absolute top-0 -translate-y-full"></div>
         <div className="w-full bg-secondary">
           <div className="flex flex-col gap-2 mx-auto  w-40 pt-8 pb-4">
-            <Link href={`/table?game=${table.game?.id}`}>
+            <Link href={`/table/${uuidv4()}?game=${table.game?.id}`}>
               <Button variant={"outline"} className="w-full">
                 Play Again
               </Button>

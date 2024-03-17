@@ -1,7 +1,12 @@
-import { redirect } from "next/navigation";
+"use client";
+
+import { redirect, useSearchParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 
 export default function NewTable() {
   const id = uuidv4();
-  redirect("/table/" + id);
+  const searchParams = useSearchParams();
+  const urlQuery = "?" + searchParams?.toString();
+
+  redirect("/table/" + id + urlQuery);
 }
