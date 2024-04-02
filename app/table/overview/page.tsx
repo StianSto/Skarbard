@@ -103,7 +103,6 @@ function Overview({ params }: any) {
           ))}
         </div>
       </section>
-      {/* <Link href={`/play/${id}`}>Start Game</Link> */}
       <Button onClick={createTable}>
         {creatingTable ? "Creating Table" : "Start Game"}
       </Button>
