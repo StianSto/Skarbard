@@ -57,10 +57,6 @@ export default function Play({ params }: { params: { id: string } }) {
     });
   }, []);
 
-  useEffect(() => {
-    updateTable();
-  }, [gameFinished]);
-
   function windowResizeHandler() {
     if (!autoLayout) return panelDirection;
     return window.innerWidth > 768 ? "horizontal" : "vertical";
@@ -84,16 +80,18 @@ export default function Play({ params }: { params: { id: string } }) {
     let nextTurn = turns + 1;
     setTurns(nextTurn);
     setCurrentTurn(nextTurn);
-    updateTable();
-
-    // check if game is completed, according to rules
-    if (table) setGameFinished(handleGameState(table));
+    updateTable(nextTurn);
   };
 
-  const updateTable = () => {
+  // When a table gets an update, check if game is completed, according to rules
+  useEffect(() => {
+    setGameFinished(handleGameState(table));
+  }, [table]);
+
+  const updateTable = (rounds?: number) => {
     const newTable: PlayGame = {
       id: table.id,
-      rounds: turns,
+      rounds: rounds || turns,
       game: table.game,
       players: activePlayers,
       gameFinished,
@@ -204,7 +202,12 @@ export default function Play({ params }: { params: { id: string } }) {
                           <Input
                             type="number"
                             className="flex-0 inline text-center w-16 bg-slate-100 hide-numbers text-base"
-                            value={player.points[currentTurn] || ""}
+                            value={
+                              player.points[currentTurn] ||
+                              player.points[currentTurn] === 0
+                                ? (player.points[currentTurn] as number)
+                                : ""
+                            }
                             onChange={(e) =>
                               addpoints(
                                 player.id,
@@ -227,7 +230,9 @@ export default function Play({ params }: { params: { id: string } }) {
                           if (!player.points[currentTurn]) return true;
                         })}
                         onClick={
-                          currentTurn === turns ? completeTurn : updateTable
+                          currentTurn === turns
+                            ? completeTurn
+                            : () => updateTable()
                         }
                       >
                         {currentTurn === turns
