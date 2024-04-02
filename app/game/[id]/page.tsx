@@ -13,7 +13,6 @@ import { defaultSettings } from "@/app/functions/gamelogic/defaultSettings";
 
 // components
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import GameRule from "@/components/ui/gameRule";
 import {

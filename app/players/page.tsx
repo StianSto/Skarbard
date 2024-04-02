@@ -61,7 +61,6 @@ export default function SetTable() {
           </div>
         </DialogContent>
       </Dialog>
-      {/* <Link href={"/game/overview/123"}>Overview</Link> */}
     </main>
   );
 }

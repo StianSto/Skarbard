@@ -130,9 +130,11 @@ export default function Play({ params }: { params: { id: string } }) {
         <section className="flex flex-col items-center pt-8 gap-10 h-full">
           <h2 className="text-6xl font-lucky">SKÅRBÅRD</h2>
           <h3 className="mx-4 text-3xl">Game Is Finished</h3>
-          <Button variant={"outline"} className="font-sans font-bold ">
-            <Link href={"/results/" + table.id}>View Results</Link>
-          </Button>
+          <Link href={"/results/" + table.id}>
+            <Button variant={"outline"} className="font-sans font-bold ">
+              View Results
+            </Button>
+          </Link>
         </section>
       ) : (
         table && (
