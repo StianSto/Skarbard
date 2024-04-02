@@ -16,12 +16,8 @@ export default function Results({ params }: { params: { id: string } }) {
 
   const findTable = tablesState.get(params.id);
   if (!findTable) router.replace("/404");
-  if (findTable?.gameFinished === false) router.replace("/table/" + params.id);
   const table = findTable as PlayGame;
 
-  // const sortedPlayers = table.players.toSorted(
-  //   (playerA, playerB) => playerA.total - playerB.total
-  // );
   const sortedPlayers = calculateWinner(
     table.players,
     table.game?.options.scoreBy?.conditions
