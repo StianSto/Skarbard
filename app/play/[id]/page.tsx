@@ -202,7 +202,12 @@ export default function Play({ params }: { params: { id: string } }) {
                           <Input
                             type="number"
                             className="flex-0 inline text-center w-16 bg-slate-100 hide-numbers text-base"
-                            value={player.points[currentTurn] || ""}
+                            value={
+                              player.points[currentTurn] ||
+                              player.points[currentTurn] === 0
+                                ? (player.points[currentTurn] as number)
+                                : ""
+                            }
                             onChange={(e) =>
                               addpoints(
                                 player.id,
