@@ -51,7 +51,7 @@ export default function Results({ params }: { params: { id: string } }) {
         <div className="bg-gradient-to-b from-transparent to-secondary h-20 w-full absolute top-0 -translate-y-full"></div>
         <div className="w-full bg-secondary">
           <div className="flex flex-col gap-2 mx-auto  w-40 pt-8 pb-4">
-            <Link href={`/table/${uuidv4()}?game=${table.game?.id}`}>
+            <Link href={`/tables/create?game=${table.game?.id}`}>
               <Button variant={"outline"} className="w-full">
                 Play Again
               </Button>
