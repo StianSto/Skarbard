@@ -1,0 +1,97 @@
+"use client";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { useStoreTable } from "@/store/tablesStore";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { PlayGame } from "../functions/gamelogic/types";
+import Link from "next/link";
+
+export default function Tables() {
+  const { tablesState } = useStoreTable((state) => state);
+  const [tables, setTables] = useState<PlayGame[]>([]);
+
+  const [searchInput, setSearchInput] = useState("");
+
+  useEffect(() => {
+    setTables(() => Array.from(tablesState.values()).map((table) => table));
+  }, [tablesState]);
+
+  return (
+    <main className="flex flex-col items-center py-8 px-4 ">
+      <Image
+        width={500}
+        height={100}
+        src={"/skarbardLogo.svg"}
+        alt="skårbård logo"
+        className="w-full max-w-[300px]"
+        loading="eager"
+      ></Image>
+
+      <section className="w-full max-w-[800px] my-8">
+        <h1 className="text-3xl font-lucky ">Tables</h1>
+        <div>
+          <div className="relative">
+            <Input
+              placeholder="Search Tables"
+              value={searchInput}
+              onChange={(e) => {
+                setSearchInput(e.target.value);
+              }}
+              className="border-0 rounded-none flex-1 pb-1"
+            ></Input>
+            <Search className="absolute top-1/2 right-0 -translate-y-1/2 me-2" />
+          </div>
+          <Separator className="mb-2" />
+        </div>
+        <DisplayTablesList tables={tables} searchInput={searchInput} />
+      </section>
+    </main>
+  );
+}
+
+function DisplayTablesList({
+  tables,
+  searchInput,
+}: {
+  tables: PlayGame[];
+  searchInput: string;
+}) {
+  const [searchTablesArray, setSearchTablesArray] = useState<PlayGame[]>([
+    ...tables,
+  ]);
+
+  useEffect(() => {
+    setSearchTablesArray(() => {
+      return tables.filter((table) =>
+        table.game?.title.toLowerCase().includes(searchInput.toLowerCase())
+      );
+    });
+  }, [searchInput, tables]);
+
+  return (
+    <>
+      <div>
+        <ul className="grid gap-2">
+          {searchTablesArray.map((table) => (
+            <li
+              key={table.id}
+              className="bg-white text-black rounded flex font-lucky "
+            >
+              <Link
+                href={"/tables/" + table.id}
+                className=" flex-1 p-4 pt-5 leading-none flex flex-col"
+              >
+                <span className="text-sm text-neutral-500">12.04.24</span>
+                <span className="text-xl leading-none">
+                  {table.game?.title}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
+  );
+}
