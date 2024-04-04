@@ -169,7 +169,7 @@ function Table() {
           <div className="flex justify-between items-center">
             <div className="flex justify-between gap-2">
               <h2 className="font-lucky text-xl">{game.title}</h2>
-              <Link href={`/game/${game.id}`}>Edit</Link>
+              <Link href={`/games/create?id=${game.id}`}>Edit</Link>
             </div>
             <Button onClick={() => setGame(null)} variant={"destructive"}>
               Remove
