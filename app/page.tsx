@@ -1,6 +1,10 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Home() {
   return (
@@ -13,19 +17,34 @@ export default function Home() {
           alt="skårbård logo"
           className="w-full"
         ></Image>
-        {/* <img src="/skarbardLogo.svg" className="w-full"></img> */}
       </h1>
-      <div className="flex flex-col items-center gap-4">
-        <Link href={"/table"}>
-          <Button className="px-8  font-extrabold">Start New Table</Button>
+
+      <div className="grid justify-items-center gap-2">
+        <Link href={"/tables/create"}>
+          <Button className="px-8  font-extrabold w-full">
+            Start New Table
+          </Button>
         </Link>
-        <Link href={"/game"}>
-          <Button className="px-8" variant={"outline"}>
+        <Link href={"/games/create"}>
+          <Button className="px-8 w-full" variant={"outline"}>
             Create a Game
           </Button>
         </Link>
       </div>
-      <div></div>
+      <div className="flex flex-col items-center gap-4"></div>
+
+      <div className="grid justify-items-center gap-2 grid-flow-col auto-cols-fr">
+        <Link href={"/tables"} className="w-full">
+          <Button className="px-8 w-full" variant={"outline"}>
+            My Tables
+          </Button>
+        </Link>
+        <Link href={"/games"} className="w-full">
+          <Button className="px-8 w-full" variant={"outline"}>
+            Games
+          </Button>
+        </Link>
+      </div>
     </main>
   );
 }

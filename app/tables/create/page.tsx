@@ -25,10 +25,11 @@ import { LucideX } from "lucide-react";
 // utils
 import { v4 as uuidv4 } from "uuid";
 
-function Table({ params }: { params: { id: string } }) {
+function Table() {
   const router = useRouter();
-  const id = params.id;
   const searchParams = useSearchParams();
+  const tableExists = searchParams?.get("id");
+  const id = tableExists || uuidv4();
   const gameID = searchParams?.get("game");
 
   // "game" or "players"
@@ -36,8 +37,9 @@ function Table({ params }: { params: { id: string } }) {
   const [newPlayer, setNewPlayer] = useState("");
   const [creatingTable, setCreatingTable] = useState("Start Game");
 
-  const { players, addPlayer, editPlayer, removePlayer, updatePlayerList } =
-    storePlayers((state) => state);
+  const { players, addPlayer, removePlayer, updatePlayerList } = storePlayers(
+    (state) => state
+  );
   const gameLib = storeGameLib((state) => state.gameLib);
   const [game, setGame] = useState<Game | null>(
     (gameID && gameLib.get(gameID)) || null
@@ -46,34 +48,19 @@ function Table({ params }: { params: { id: string } }) {
 
   const [table, setTable] = useState(
     tablesState.get(id) || {
-      id,
-      game: null,
-      gameFinished: false,
-      rounds: 0,
+      game,
       players,
     }
   );
 
   useEffect(() => {
-    let newTable: PlayGame | undefined = tablesState.get(id);
-    if (!newTable) return;
-
-    setGame(() => newTable?.game as Game | null);
-    updatePlayerList(newTable.players);
+    setGame(() => table.game);
+    updatePlayerList(table.players);
   }, []);
 
   function handleSelectGame(id: string) {
     const updateGame = gameLib.get(id);
-    if (!updateGame) return;
-    setGame(updateGame);
-    setTable((state) => {
-      state.game = updateGame;
-      return state;
-    });
-  }
-
-  function handleRemove(id: string) {
-    setGame(() => null);
+    if (updateGame) setGame(updateGame);
   }
 
   function handleAddPlayer(e: FormEvent) {
@@ -91,7 +78,7 @@ function Table({ params }: { params: { id: string } }) {
     if (!game) return;
     if (!players) return;
 
-    setCreatingTable("saving Table");
+    setCreatingTable("Creating Table");
 
     const playersScore: ActivePlayer[] = players.map((player) => {
       return {
@@ -103,15 +90,14 @@ function Table({ params }: { params: { id: string } }) {
     });
 
     addTable({
-      game,
-      gameFinished: false,
       id,
+      game,
       players: playersScore,
       rounds: 0,
+      gameFinished: false,
     });
-    setCreatingTable("Creating Table");
 
-    router.push("/play/" + table.id);
+    router.push("/play/" + id);
   }
 
   return (
@@ -185,10 +171,7 @@ function Table({ params }: { params: { id: string } }) {
               <h2 className="font-lucky text-xl">{game.title}</h2>
               <Link href={`/game/${game.id}`}>Edit</Link>
             </div>
-            <Button
-              onClick={() => handleRemove(game.id)}
-              variant={"destructive"}
-            >
+            <Button onClick={() => setGame(null)} variant={"destructive"}>
               Remove
             </Button>
           </div>
