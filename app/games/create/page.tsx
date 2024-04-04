@@ -9,7 +9,6 @@ import { storeGameLib } from "@/store/gameLibraryStore";
 import { useGameSettingsStore } from "@/store/gameSettingsStore";
 
 // types and variable imports
-import { Game } from "../../functions/gamelogic/types";
 import { defaultSettings } from "@/app/functions/gamelogic/defaultSettings";
 
 // components
@@ -26,8 +25,9 @@ import createRuleString from "@/app/functions/utils/createRuleString";
 
 // utils
 import { v4 as uuidv4 } from "uuid";
+import dynamic from "next/dynamic";
 
-export default function CreateGame() {
+function CreateGame() {
   const router = useRouter();
 
   const searchParams = useSearchParams();
@@ -134,3 +134,5 @@ export default function CreateGame() {
     </main>
   );
 }
+
+export default dynamic(() => Promise.resolve(CreateGame), { ssr: false });
