@@ -9,14 +9,10 @@ import { PlayGame } from "../functions/gamelogic/types";
 import Link from "next/link";
 
 export default function Tables() {
-  const { tablesState } = useStoreTable((state) => state);
-  const [tables, setTables] = useState<PlayGame[]>([]);
-
+  const tables = Array.from(
+    useStoreTable((state) => state.tablesState).values()
+  );
   const [searchInput, setSearchInput] = useState("");
-
-  useEffect(() => {
-    setTables(() => Array.from(tablesState.values()).map((table) => table));
-  }, [tablesState]);
 
   return (
     <main className="flex flex-col items-center py-8 px-4 ">
