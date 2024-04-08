@@ -54,9 +54,8 @@ function DisplayTablesList({
   tables: PlayGame[];
   searchInput: string;
 }) {
-  const [searchTablesArray, setSearchTablesArray] = useState<PlayGame[]>([
-    ...tables.toSorted((a, b) => Date.parse(b.created) - Date.parse(a.created)),
-  ]);
+  const [searchTablesArray, setSearchTablesArray] =
+    useState<PlayGame[]>(tables);
 
   useEffect(() => {
     setSearchTablesArray(() =>
