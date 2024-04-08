@@ -11,7 +11,7 @@ import Link from "next/link";
 export default function Tables() {
   const tables = Array.from(
     useStoreTable((state) => state.tablesState).values()
-  );
+  ).toSorted((a, b) => Date.parse(b.created) - Date.parse(a.created));
   const [searchInput, setSearchInput] = useState("");
 
   return (
@@ -55,17 +55,15 @@ function DisplayTablesList({
   searchInput: string;
 }) {
   const [searchTablesArray, setSearchTablesArray] = useState<PlayGame[]>([
-    ...tables,
+    ...tables.toSorted((a, b) => Date.parse(b.created) - Date.parse(a.created)),
   ]);
 
   useEffect(() => {
-    setSearchTablesArray(() => {
-      return tables
-        .filter((table) =>
-          table.game?.title.toLowerCase().includes(searchInput.toLowerCase())
-        )
-        .toSorted((a, b) => Date.parse(b.created) - Date.parse(a.created));
-    });
+    setSearchTablesArray(() =>
+      tables.filter((table) =>
+        table.game?.title.toLowerCase().includes(searchInput.toLowerCase())
+      )
+    );
   }, [searchInput, tables]);
 
   return (
