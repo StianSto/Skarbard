@@ -22,5 +22,6 @@ export type PlayGame = {
 	rounds: number,
 	game: Game | null,
 	players: ActivePlayer[],
-	gameFinished: boolean
+	gameFinished: boolean,
+	created: string,
 }

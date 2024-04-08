@@ -95,6 +95,7 @@ function Table() {
       players: playersScore,
       rounds: 0,
       gameFinished: false,
+      created: new Date().toISOString(),
     });
 
     router.push("/play/" + id);
