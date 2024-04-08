@@ -95,6 +95,7 @@ export default function Play({ params }: { params: { id: string } }) {
       game: table.game,
       players: activePlayers,
       gameFinished,
+      created: table.created,
     };
 
     addTable(newTable);

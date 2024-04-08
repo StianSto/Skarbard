@@ -60,9 +60,11 @@ function DisplayTablesList({
 
   useEffect(() => {
     setSearchTablesArray(() => {
-      return tables.filter((table) =>
-        table.game?.title.toLowerCase().includes(searchInput.toLowerCase())
-      );
+      return tables
+        .filter((table) =>
+          table.game?.title.toLowerCase().includes(searchInput.toLowerCase())
+        )
+        .toSorted((a, b) => Date.parse(b.created) - Date.parse(a.created));
     });
   }, [searchInput, tables]);
 
@@ -70,22 +72,36 @@ function DisplayTablesList({
     <>
       <div>
         <ul className="grid gap-2">
-          {searchTablesArray.map((table) => (
-            <li
-              key={table.id}
-              className="bg-white text-black rounded flex font-lucky "
-            >
-              <Link
-                href={"/tables/" + table.id}
-                className=" flex-1 p-4 pt-5 leading-none flex flex-col"
+          {searchTablesArray.map((table) => {
+            const created = new Date(table.created);
+            const createdToday =
+              new Date().toLocaleDateString() === created.toLocaleDateString();
+
+            return (
+              <li
+                key={table.id}
+                className="bg-white text-black rounded flex font-lucky "
               >
-                <span className="text-sm text-neutral-500">12.04.24</span>
-                <span className="text-xl leading-none">
-                  {table.game?.title}
-                </span>
-              </Link>
-            </li>
-          ))}
+                <Link
+                  href={"/tables/" + table.id}
+                  className=" flex-1 p-4 pt-5 leading-none flex flex-col"
+                >
+                  <span className="text-sm text-neutral-500">
+                    {createdToday
+                      ? "today at " +
+                        created.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      : created.toLocaleDateString()}
+                  </span>
+                  <span className="text-xl leading-none">
+                    {table.game?.title}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </>
