@@ -70,6 +70,8 @@ function DisplayTablesList({
       <div>
         <ul className="grid gap-2">
           {searchTablesArray.map((table) => {
+            if (table.tableFinished) return;
+
             const created = new Date(table.created);
             const createdToday =
               new Date().toLocaleDateString() === created.toLocaleDateString();

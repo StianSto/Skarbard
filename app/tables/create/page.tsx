@@ -56,6 +56,7 @@ function Table() {
   useEffect(() => {
     setGame(() => table.game);
     updatePlayerList(table.players);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleSelectGame(id: string) {
@@ -94,7 +95,7 @@ function Table() {
       game,
       players: playersScore,
       rounds: 0,
-      gameFinished: false,
+      tableFinished: false,
       created: new Date().toISOString(),
     });
 
