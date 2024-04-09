@@ -71,6 +71,7 @@ function DisplayTablesList({
         <ul className="grid gap-2">
           {searchTablesArray.map((table) => {
             if (table.gameFinished) return;
+
             const created = new Date(table.created);
             const createdToday =
               new Date().toLocaleDateString() === created.toLocaleDateString();
@@ -78,7 +79,7 @@ function DisplayTablesList({
             return (
               <li
                 key={table.id}
-                className={"bg-white text-black rounded flex font-lucky "}
+                className="bg-white text-black rounded flex font-lucky "
               >
                 <Link
                   href={"/tables/" + table.id}
