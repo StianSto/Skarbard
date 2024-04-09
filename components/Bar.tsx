@@ -31,7 +31,7 @@ export default function Bar({
         {playerName}
       </p>
       <p
-        className={`px-4 py-2 pt-3 rounded rounded-s-none bg-white text-black font-bold outline-bold scoreboard-bar text-right relative -translate-x-1 relative`}
+        className={`px-4 py-2 pt-3 rounded rounded-s-none bg-white text-black font-bold outline-bold scoreboard-bar text-right -translate-x-1 relative`}
         style={{ width: size + "%" }}
       >
         <span className="absolute top-50 right-2">{playerScore}</span>

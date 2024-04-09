@@ -41,7 +41,7 @@ export default function Play({ params }: { params: { id: string } }) {
   // table states
   const [turns, setTurns] = useState(table.rounds);
   const [currentTurn, setCurrentTurn] = useState(table.rounds);
-  const [gameFinished, setGameFinished] = useState(table.gameFinished);
+  const [tableFinished, setTableFinished] = useState(table.tableFinished);
   const [activePlayers, setActivePlayers] = useState<ActivePlayer[]>(
     table.players
   );
@@ -55,6 +55,7 @@ export default function Play({ params }: { params: { id: string } }) {
     window.addEventListener("resize", () => {
       setPanelDirection(windowResizeHandler);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function windowResizeHandler() {
@@ -85,13 +86,14 @@ export default function Play({ params }: { params: { id: string } }) {
 
   // When a table gets an update, check if game is completed, according to rules
   useEffect(() => {
-    setGameFinished(handleGameState(table));
+    setTableFinished(handleGameState(table));
   }, [table]);
 
-  // Save Table when gameFinished is changed
+  // Save Table when tableFinished is changed
   useEffect(() => {
-    addTable({ ...table, gameFinished });
-  }, [gameFinished]);
+    addTable({ ...table, tableFinished });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tableFinished]);
 
   const updateTable = (rounds?: number) => {
     const newTable: PlayGame = {
@@ -99,7 +101,7 @@ export default function Play({ params }: { params: { id: string } }) {
       rounds: rounds || turns,
       game: table.game,
       players: activePlayers,
-      gameFinished,
+      tableFinished,
       created: table.created,
     };
 
@@ -132,7 +134,7 @@ export default function Play({ params }: { params: { id: string } }) {
 
   return (
     <main className="h-full font-lucky">
-      {gameFinished ? (
+      {tableFinished ? (
         <section className="flex flex-col items-center pt-8 gap-10 h-full">
           <h2 className="text-6xl font-lucky">SKÅRBÅRD</h2>
           <h3 className="mx-4 text-3xl">Game Is Finished</h3>
@@ -230,7 +232,7 @@ export default function Play({ params }: { params: { id: string } }) {
 
                     <div className="my-4 flex gap-4 justify-evenly w-full">
                       {table.game?.options.gameIsFinished.active === false && (
-                        <EndGame setGameIsFinished={setGameFinished}></EndGame>
+                        <EndGame setGameIsFinished={setTableFinished}></EndGame>
                       )}
                       <Button
                         disabled={activePlayers.some((player) => {
