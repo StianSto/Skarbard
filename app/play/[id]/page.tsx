@@ -88,6 +88,11 @@ export default function Play({ params }: { params: { id: string } }) {
     setGameFinished(handleGameState(table));
   }, [table]);
 
+  // Save Table when gameFinished is changed
+  useEffect(() => {
+    addTable({ ...table, gameFinished });
+  }, [gameFinished]);
+
   const updateTable = (rounds?: number) => {
     const newTable: PlayGame = {
       id: table.id,
