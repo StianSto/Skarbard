@@ -15,14 +15,16 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
+import EndGame from "@/components/EndGame";
+import Bar from "@/components/Bar";
+import { Settings } from "lucide-react";
 
 // utils
 import { handleGameState } from "@/lib/functions/gamelogic";
 import { useStoreTable } from "@/store/tablesStore";
-import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import EndGame from "@/components/endGame";
-import Bar from "@/components/Bar";
+import SettingsPlay from "@/components/SettingsPlay";
 
 export default function Play({ params }: { params: { id: string } }) {
   // find table from storage, if not redirect
@@ -135,7 +137,7 @@ export default function Play({ params }: { params: { id: string } }) {
   return (
     <main className="h-full font-lucky">
       {tableFinished ? (
-        <section className="flex flex-col items-center pt-8 gap-10 h-full">
+        <section className="flex flex-col items-center h-full gap-10 pt-8">
           <h2 className="text-6xl font-lucky">SKÅRBÅRD</h2>
           <h3 className="mx-4 text-3xl">Game Is Finished</h3>
           <Link href={"/results/" + table.id}>
@@ -154,13 +156,22 @@ export default function Play({ params }: { params: { id: string } }) {
                 minSize={panelDirection === "horizontal" ? 30 : 10}
                 className="flex flex-col"
               >
-                <h2 className="text-center text-6xl font-lucky mt-8">
-                  SKÅRBÅRD
-                </h2>
-                <h3 className="mx-4 text-center text-xl">
-                  {table?.game?.title}
-                </h3>
-                <section className="my-3 md:mt-12 w-4/5 flex-1">
+                <section className="flex justify-center p-2">
+                  <Link href={"/"}>
+                    <Button size={"sm"}>Back</Button>
+                  </Link>
+                  <div className="flex-1">
+                    <h2 className="mt-8 text-6xl text-center font-lucky">
+                      SKÅRBÅRD
+                    </h2>
+                    <h3 className="mx-4 text-xl text-center">
+                      {table?.game?.title}
+                    </h3>
+                  </div>
+                  <SettingsPlay />
+                </section>
+
+                <section className="flex-1 w-4/5 my-3 md:mt-12">
                   <div className="gap-4 gap-x-0 ">
                     {table?.players.map((player, index) => (
                       <Bar
@@ -182,11 +193,11 @@ export default function Play({ params }: { params: { id: string } }) {
                 className={`bg-white`}
                 style={{ overflow: "auto" }}
               >
-                <section className="h-full my-2 flex flex-col items-center rounded-none border-none bg-white text-black max-w-md mx-auto ">
-                  <div className="mx-auto grid grid-cols-3 w-full place-items-center my-8">
+                <section className="flex flex-col items-center h-full max-w-md mx-auto my-2 text-black bg-white border-none rounded-none ">
+                  <div className="grid w-full grid-cols-3 mx-auto my-8 place-items-center">
                     {currentTurn > 0 && (
                       <ChevronLeftIcon
-                        className="text-gray-800 h-6 w-6"
+                        className="w-6 h-6 text-gray-800"
                         onClick={() => setCurrentTurn(currentTurn - 1)}
                       />
                     )}
@@ -195,7 +206,7 @@ export default function Play({ params }: { params: { id: string } }) {
                     </p>
                     {currentTurn < turns && (
                       <ChevronRightIcon
-                        className="text-gray-800 h-6 w-6"
+                        className="w-6 h-6 text-gray-800"
                         onClick={() => setCurrentTurn(currentTurn + 1)}
                       />
                     )}
@@ -206,12 +217,12 @@ export default function Play({ params }: { params: { id: string } }) {
                       activePlayers.map((player) => (
                         <div
                           key={player.id}
-                          className="flex justify-between w-full items-center gap-2 mx-auto px-4 min-w-fit"
+                          className="flex items-center justify-between w-full gap-2 px-4 mx-auto min-w-fit"
                         >
                           <p className="flex-1 w-100">{player.name}</p>
                           <Input
                             type="number"
-                            className="flex-0 inline text-center w-16 bg-slate-100 hide-numbers text-base"
+                            className="inline w-16 text-base text-center flex-0 bg-slate-100 hide-numbers"
                             value={
                               player.points[currentTurn] ||
                               player.points[currentTurn] === 0
@@ -230,10 +241,9 @@ export default function Play({ params }: { params: { id: string } }) {
                         </div>
                       ))}
 
-                    <div className="my-4 flex gap-4 justify-evenly w-full">
-                      {table.game?.options.gameIsFinished.active === false && (
-                        <EndGame setGameIsFinished={setTableFinished}></EndGame>
-                      )}
+                    <div className="flex w-full gap-4 my-4 justify-evenly">
+                      <EndGame setGameIsFinished={setTableFinished}></EndGame>
+
                       <Button
                         disabled={activePlayers.some((player) => {
                           if (player.points[currentTurn] === 0) return false;

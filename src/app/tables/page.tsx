@@ -16,7 +16,7 @@ export default function Tables() {
   const [searchInput, setSearchInput] = useState("");
 
   return (
-    <main className="flex flex-col items-center py-8 px-4 ">
+    <main className="flex flex-col items-center px-4 py-8 ">
       <Image
         width={500}
         height={100}
@@ -36,9 +36,9 @@ export default function Tables() {
               onChange={(e) => {
                 setSearchInput(e.target.value);
               }}
-              className="border-0 rounded-none flex-1 pb-1"
+              className="flex-1 pb-1 border-0 rounded-none"
             ></Input>
-            <Search className="absolute top-1/2 right-0 -translate-y-1/2 me-2" />
+            <Search className="absolute right-0 -translate-y-1/2 top-1/2 me-2" />
           </div>
           <Separator className="mb-2" />
         </div>
@@ -80,11 +80,11 @@ function DisplayTablesList({
             return (
               <li
                 key={table.id}
-                className="bg-white text-black rounded flex font-lucky "
+                className="flex text-black bg-white rounded font-lucky"
               >
                 <Link
                   href={"/tables/" + table.id}
-                  className=" flex-1 p-4 pt-5 leading-none flex flex-col"
+                  className="flex flex-col flex-1 p-4 pt-5 leading-none "
                 >
                   <span className="text-sm text-neutral-500">
                     {createdToday
