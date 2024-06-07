@@ -14,7 +14,7 @@ interface GameState {
 interface Actions {
 	updateGameState: (state: Game) => void
 	updateTitle: (newValue: string) => void
-	updateRule: (string: string, newValue: boolean) => void,
+	updateRule: (string: string, newValue: boolean | null) => void,
 	updateCondition: (ruleKey: string, condition: string, newValue: any) => void
 	resetToDefault: () => void
 }

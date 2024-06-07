@@ -1,4 +1,5 @@
 import Bar from "@/components/Bar";
+import SettingsPlay from "@/components/SettingsPlay/SettingsPlay";
 import { Button } from "@/components/ui/button";
 import { PlayGame } from "@/types/globals";
 import Link from "next/link";
@@ -37,7 +38,7 @@ export default function PlayLeftPanel({ table }: { table: PlayGame }) {
           <h2 className="mt-8 text-6xl text-center font-lucky">SKÅRBÅRD</h2>
           <h3 className="mx-4 text-xl text-center">{table?.game?.title}</h3>
         </div>
-        {/* <SettingsPlay /> */}
+        <SettingsPlay table={table} />
       </section>
       <section className="flex-1 w-4/5 my-3 md:mt-12">
         <div className="gap-4 gap-x-0 ">
