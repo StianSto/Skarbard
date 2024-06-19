@@ -49,13 +49,13 @@ export default function GameRule({
   };
 
   return (
-    <Card className="w-full max-w-md p-4 relative">
-      <CardHeader className="text-lg font-bold p-0">
+    <Card className="relative w-full max-w-md p-4">
+      <CardHeader className="p-0 text-lg font-bold">
         {createRuleString(rule)}
       </CardHeader>
       <Separator />
 
-      <CardContent className="text-base p-0 mt-2">
+      <CardContent className="p-0 mt-2 text-base">
         <ul className="flex flex-col gap-3">
           {conditions &&
             Object.entries(conditions).map(
@@ -123,7 +123,7 @@ export default function GameRule({
         <Button
           onClick={() => updateRule(rule, false)}
           variant={"destructive"}
-          className="absolute -top-3 -right-3 hover size-10 p-1"
+          className="absolute p-1 -top-3 -right-3 hover size-10"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

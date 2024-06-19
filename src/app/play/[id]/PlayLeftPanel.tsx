@@ -1,6 +1,8 @@
 import Bar from "@/components/Bar";
+import SettingsPlay from "@/components/SettingsPlay/SettingsPlay";
 import { Button } from "@/components/ui/button";
 import { PlayGame } from "@/types/globals";
+import { Home } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -29,15 +31,15 @@ export default function PlayLeftPanel({ table }: { table: PlayGame }) {
     <>
       <section className="flex justify-center p-2">
         <Link href={"/"}>
-          <Button size={"sm"} className="absolute">
-            Back
+          <Button size={"sm"} className="absolute p-2 h-fit">
+            <Home />
           </Button>
         </Link>
         <div className="flex-1">
           <h2 className="mt-8 text-6xl text-center font-lucky">SKÅRBÅRD</h2>
           <h3 className="mx-4 text-xl text-center">{table?.game?.title}</h3>
         </div>
-        {/* <SettingsPlay /> */}
+        <SettingsPlay table={table} />
       </section>
       <section className="flex-1 w-4/5 my-3 md:mt-12">
         <div className="gap-4 gap-x-0 ">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Luckiest_Guy } from "next/font/google";
 import "./globals.css";
+import Nav from "@/components/Nav";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,7 +30,12 @@ export default function RootLayout({
       lang="en"
       className={` font-sans ${inter.variable} ${luckiestGuy.variable}`}
     >
-      <body className="h-svh">{children}</body>
+      <body className="h-svh">
+        <header>
+          <Nav />
+        </header>
+        {children}
+      </body>
     </html>
   );
 }

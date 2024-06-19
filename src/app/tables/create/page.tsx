@@ -103,8 +103,8 @@ function Table() {
   }
 
   return (
-    <main className="py-8 px-4 mx-auto max-w-md flex flex-col flex-1">
-      <h1 className="font-lucky text-center text-4xl">Set Table</h1>
+    <main className="flex flex-col flex-1 max-w-md px-4 py-8 mx-auto">
+      <h1 className="text-4xl text-center font-lucky">Set Table</h1>
       <nav className="mt-2">
         <div className="flex font-lucky">
           <Button
@@ -117,7 +117,7 @@ function Table() {
             <span className="relative">
               Game
               {game && (
-                <span className="absolute -top-2 -right-2 rotate-45 text-lg text-green-500  drop-shadow shadow-black">
+                <span className="absolute text-lg text-green-500 rotate-45 -top-2 -right-2 drop-shadow shadow-black">
                   OK
                 </span>
               )}
@@ -134,7 +134,7 @@ function Table() {
             <span className="relative">
               Players
               {players.length > 0 && (
-                <span className="absolute -top-2 -right-2 rotate-45 text-lg text-green-500 drop-shadow shadow-black">
+                <span className="absolute text-lg text-green-500 rotate-45 -top-2 -right-2 drop-shadow shadow-black">
                   OK
                 </span>
               )}
@@ -149,15 +149,15 @@ function Table() {
           <Link href={"/games/create"} className="flex justify-center">
             <Button
               variant={"secondary"}
-              className="bg-yellow-300 text-black my-4 flex-1"
+              className="flex-1 my-4 text-black bg-yellow-300"
             >
               CREATE A NEW GAME
             </Button>
           </Link>
-          <div className="text-center flex items-center gap-4 px-4 my-10 flex-1 opacity-50 w-72 mx-auto">
-            <Separator className="w-auto flex-1" />
+          <div className="flex items-center flex-1 gap-4 px-4 mx-auto my-10 text-center opacity-50 w-72">
+            <Separator className="flex-1 w-auto" />
             <span>or</span>
-            <Separator className="w-auto flex-1" />
+            <Separator className="flex-1 w-auto" />
           </div>
           <div>
             <SearchGames selectGame={(value: any) => handleSelectGame(value)} />
@@ -168,9 +168,9 @@ function Table() {
       {/* show and edit/remove selected game*/}
       {game && multistep === "game" && (
         <section className="my-10">
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <div className="flex justify-between gap-2">
-              <h2 className="font-lucky text-xl">{game.title}</h2>
+              <h2 className="text-xl font-lucky">{game.title}</h2>
               <Link href={`/games/create?id=${game.id}`}>Edit</Link>
             </div>
             <Button onClick={() => setGame(null)} variant={"destructive"}>
@@ -209,7 +209,7 @@ function Table() {
             {players.map((player, index) => (
               <li
                 key={index}
-                className="px-2 py-2 rounded bg-slate-100 flex text-black"
+                className="flex px-2 py-2 text-black rounded bg-slate-100"
               >
                 <p className="px-3 font-bold">{player.name}</p>
                 <LucideX onClick={() => removePlayer(player.id)} />
