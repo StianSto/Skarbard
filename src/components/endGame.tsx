@@ -16,9 +16,9 @@ export default function EndGame({
         <Button variant={"destructive"}>End Game</Button>
       </DialogTrigger>
 
-      <DialogContent className="bg-white text-black sm:mx-4 ">
+      <DialogContent className="text-black bg-white sm:mx-4 ">
         <p className="">Are you sure you want to end this game?</p>
-        <div className="flex gap-4 justify-between">
+        <div className="flex justify-between gap-4">
           <DialogClose asChild>
             <Button variant={"destructive"}>No</Button>
           </DialogClose>

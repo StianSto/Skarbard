@@ -14,7 +14,7 @@ import { storeGameLib } from "@/store/gameLibraryStore";
 import { storePlayers } from "@/store/playersStore";
 
 // components
-import SearchGames from "@/components/searchGames";
+import SearchGames from "@/components/SearchGames";
 import { Button } from "@/components/ui/button";
 import GameRule from "@/components/ui/gameRule";
 import { Separator } from "@/components/ui/separator";
