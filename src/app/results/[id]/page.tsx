@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button";
 import { useStoreTable } from "@/store/tablesStore";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import React from "react";
+import React, { use } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-export default function Results({ params }: { params: { id: string } }) {
+export default function Results(props: { params: Promise<{ id: string }> }) {
+  const params = use(props.params);
   const router = useRouter();
 
   const { tablesState, addTable } = useStoreTable((state) => state);
