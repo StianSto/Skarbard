@@ -13,7 +13,7 @@ export default function Home() {
         <Image
           width={500}
           height={100}
-          src={"/skarbardLogo.svg"}
+          src={"/skarbard_logo.png"}
           alt="skårbård logo"
           className="w-full"
         ></Image>
