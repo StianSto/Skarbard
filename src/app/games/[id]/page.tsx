@@ -1,7 +1,7 @@
 "use client";
 
 // react / next
-import React, { useEffect, use } from "react";
+import React, { useEffect } from "react";
 
 // store
 import { storeGameLib } from "@/store/gameLibraryStore";
@@ -13,8 +13,7 @@ import GameRule from "@/components/ui/gameRule";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function GameByID(props: { params: Promise<{ id: string }> }) {
-  const params = use(props.params);
+export default function GameByID({ params }: { params: { id: string } }) {
   const id = params.id;
   const router = useRouter();
 

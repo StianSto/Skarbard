@@ -1,7 +1,7 @@
 "use client";
 
 // react
-import React, { useEffect, useState, use } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 // types
@@ -22,8 +22,7 @@ import { useStoreTable } from "@/store/tablesStore";
 import PlayLeftPanel from "./PlayLeftPanel";
 import PlayRightPanel from "./PlayRightPanel";
 
-export default function Play(props: { params: Promise<{ id: string }> }) {
-  const params = use(props.params);
+export default function Play({ params }: { params: { id: string } }) {
   // find table from storage, if not redirect
   const router = useRouter();
   const { tablesState, addTable } = useStoreTable((state) => state);
