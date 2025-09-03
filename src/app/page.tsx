@@ -21,7 +21,7 @@ export default function Home() {
 
       <div className="grid justify-items-center gap-2">
         <Link href={"/tables/create"}>
-          <Button className="px-8  font-extrabold w-full">
+          <Button className="px-8 font-extrabold w-full">
             Start New Table
           </Button>
         </Link>

@@ -29,7 +29,7 @@ export default function PlayLeftPanel({ table }: { table: PlayGame }) {
 
   return (
     <>
-      <section className="flex justify-center p-2">
+      <section className="flex justify-center p-2 relative">
         <Link href={"/"}>
           <Button size={"sm"} className="absolute p-2 h-fit">
             <Home />
@@ -39,7 +39,9 @@ export default function PlayLeftPanel({ table }: { table: PlayGame }) {
           <h2 className="mt-8 text-6xl text-center font-lucky">SKÅRBÅRD</h2>
           <h3 className="mx-4 text-xl text-center">{table?.game?.title}</h3>
         </div>
-        <SettingsPlay table={table} />
+        <div className="absolute right-2">
+          <SettingsPlay table={table} />
+        </div>
       </section>
       <section className="flex-1 w-4/5 my-3 md:mt-12">
         <div className="gap-4 gap-x-0 ">

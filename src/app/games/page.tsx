@@ -15,14 +15,14 @@ export default function Games() {
 
   return (
     <main className="flex flex-col items-center py-8 px-4 ">
-      <Image
+      {/* <Image
         width={500}
         height={100}
         src={"/skarbardLogo.svg"}
         alt="skårbård logo"
         className="w-full max-w-[300px]"
         loading="eager"
-      ></Image>
+      ></Image> */}
 
       <section className="w-full max-w-[800px] my-8">
         <h1 className="text-3xl font-lucky ">Games</h1>

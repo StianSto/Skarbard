@@ -147,10 +147,7 @@ function Table() {
       {!game && multistep === "game" && (
         <section className="flex flex-col justify-center my-6">
           <Link href={"/games/create"} className="flex justify-center">
-            <Button
-              variant={"secondary"}
-              className="flex-1 my-4 text-black bg-yellow-300"
-            >
+            <Button className="flex-1 my-4 text-black">
               CREATE A NEW GAME
             </Button>
           </Link>
