@@ -27,7 +27,7 @@ export default function Tables() {
               onChange={(e) => {
                 setSearchInput(e.target.value);
               }}
-              className="flex-1 pb-1 border-0 rounded-none"
+              className="flex-1 pb-1 border-0"
             ></Input>
             <Search className="absolute right-0 -translate-y-1/2 top-1/2 me-2" />
           </div>
