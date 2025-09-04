@@ -122,12 +122,7 @@ function CreateGame() {
       </section>
 
       <div className="my-2 mt-auto flex justify-center">
-        <Button
-          onClick={saveGame}
-          size={"lg"}
-          className="text-lg"
-          variant={"outline"}
-        >
+        <Button onClick={saveGame} size={"lg"} className="">
           Save Game Settings
         </Button>
       </div>

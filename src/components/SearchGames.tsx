@@ -39,7 +39,7 @@ export default function SearchGames({ selectGame }: { selectGame: any }) {
           onChange={(e) => {
             setSearchInput(e.target.value);
           }}
-          className="border-0 rounded-none flex-1 pb-1"
+          className="border-0 flex-1 pb-1"
         ></Input>
         <Search className="absolute top-1/2 right-0 -translate-y-1/2 me-2" />
       </div>

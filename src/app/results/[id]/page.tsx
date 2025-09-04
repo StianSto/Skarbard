@@ -26,19 +26,19 @@ export default function Results({ params }: { params: { id: string } }) {
     <main className="flex flex-col items-center py-8 h-full">
       <h1 className="text-6xl font-lucky">SKÅRBÅRD</h1>
 
-      <section className="flex flex-col gap-2 w-full max-w-[500px] items-center mt-8">
+      <section className="flex flex-col gap-2 w-full max-w-[500px] items-center mt-8 px-2">
         {sortedPlayers.map((player, index) => (
           <div
             key={player.id}
             className={`
 						${
               index === 0 &&
-              "bg-amber-400 border-2 shadow border-yellow-300 py-8 text-xl  "
+              "!bg-amber-400 border-2 shadow !border-yellow-300 py-8 text-xl  "
             }
-						${index === 1 && "bg-zinc-300 border-2 shadow border-zinc-100   "}
-						${index === 2 && "bg-yellow-600 border-2 shadow border-yellow-400  "}
+						${index === 1 && "!bg-zinc-300 border-2 shadow !border-zinc-100   "}
+						${index === 2 && "!bg-yellow-600 border-2 shadow !border-yellow-400  "}
 
-						flex justify-between bg-white rounded p-4 text-black w-full`}
+						flex justify-between  rounded p-4 text-black w-full`}
           >
             <h3>{player.name}</h3>
             <p>{player.total}</p>
