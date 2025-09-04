@@ -2,7 +2,7 @@
 
 // react / next
 import React, { useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 
 // store
 import { storeGameLib } from "@/store/gameLibraryStore";
@@ -21,11 +21,18 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import createRuleString from "@/lib/functions/utils/createRuleString";
 
 // utils
 import { v4 as uuidv4 } from "uuid";
 import dynamic from "next/dynamic";
+
 
 function CreateGame() {
   const router = useRouter();
@@ -33,10 +40,25 @@ function CreateGame() {
   const searchParams = useSearchParams();
   const idParam = searchParams?.get("id");
 
-  const { gameLib, addGame } = storeGameLib((state) => state);
+  const { gameLib, addGame, removeGame } = storeGameLib((state) => state);
   const gameExists = gameLib.get(idParam || "");
   const { game, updateRule, updateTitle, updateGameState } =
     useGameSettingsStore((state) => state);
+
+  let deleteGameMessage = null;
+
+  function handleRemoveGame() {
+    if (idParam && gameExists) {
+      removeGame(idParam);
+      router.replace("/games");
+    } else {
+      deleteGameMessage =
+        "Could not delete game. Refresh the page and try again";
+      setTimeout(() => {
+        deleteGameMessage = null;
+      }, 1000);
+    }
+  }
 
   useEffect(() => {
     updateGameState(
@@ -58,9 +80,39 @@ function CreateGame() {
 
   return (
     <main className="py-8 px-4 mx-auto max-w-md flex flex-col flex-1">
-      <h1 className="font-lucky text-4xl">
-        {gameExists ? "Edit Game" : "New Game"}
-      </h1>
+      <div className="flex justify-between">
+        <h1 className="font-lucky text-4xl">
+          {gameExists ? "Edit Game" : "New Game"}
+        </h1>
+
+        {idParam && (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant={"destructive"}>Delete</Button>
+            </DialogTrigger>
+
+            <DialogContent className="text-black bg-white sm:mx-4 ">
+              {deleteGameMessage ? (
+                <p>{deleteGameMessage}</p>
+              ) : (
+                <>
+                  <p className="">Are you sure you want to delete this game?</p>
+                  <div className="flex justify-between gap-4">
+                    <DialogClose asChild>
+                      <Button variant={"destructive"}>No</Button>
+                    </DialogClose>
+                    <DialogClose asChild>
+                      <Button variant={"ghost"} onClick={handleRemoveGame}>
+                        Yes, i want to delete this game
+                      </Button>
+                    </DialogClose>
+                  </div>
+                </>
+              )}
+            </DialogContent>
+          </Dialog>
+        )}
+      </div>
 
       <div className="max-w-md my-8">
         <h2 className="font-lucky text-2xl">Game Title</h2>

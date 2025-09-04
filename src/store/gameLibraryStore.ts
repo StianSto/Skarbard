@@ -78,7 +78,6 @@ export const storeGameLib = create<StoreGameLibState & StoreGameLibActions>()(pe
 				}
 			},
 			setItem: (name, newValue: StorageValue<StoreGameLibState>) => {
-				// functions cannot be JSON encoded
 				const str = JSON.stringify({
 					state: {
 						...newValue.state,
