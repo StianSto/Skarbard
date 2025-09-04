@@ -23,33 +23,31 @@ export default function Results({ params }: { params: { id: string } }) {
   );
 
   return (
-    <main className="flex flex-col items-center py-8 px-4 ">
+    <main className="flex flex-col items-center py-8 h-full">
       <h1 className="text-6xl font-lucky">SKÅRBÅRD</h1>
 
-      <section className="flex flex-col gap-2 w-full max-w-[500px] items-center mt-8">
+      <section className="flex flex-col gap-2 w-full max-w-[500px] items-center mt-8 px-2">
         {sortedPlayers.map((player, index) => (
           <div
             key={player.id}
             className={`
 						${
               index === 0 &&
-              "bg-yellow-600 border-2 shadow border-yellow-400 py-8 text-xl  "
+              "!bg-amber-400 border-2 shadow !border-yellow-300 py-8 text-xl  "
             }
+						${index === 1 && "!bg-zinc-300 border-2 shadow !border-zinc-100   "}
+						${index === 2 && "!bg-yellow-600 border-2 shadow !border-yellow-400  "}
 
-						flex justify-between bg-white rounded p-4 text-black w-full`}
-            style={{
-              width: 100 - index * 5 + "%",
-            }}
+						flex justify-between  rounded p-4 text-black w-full`}
           >
             <h3>{player.name}</h3>
             <p>{player.total}</p>
           </div>
         ))}
       </section>
-      <section className="w-full min-h-fit sticky bottom-0 mt-8">
-        <div className="bg-gradient-to-b from-transparent to-secondary h-20 w-full absolute top-0 -translate-y-full"></div>
-        <div className="w-full bg-secondary">
-          <div className="flex flex-col gap-2 mx-auto  w-40 pt-8 pb-4">
+      <section className="w-full min-h-fit bottom-0 mt-auto">
+        <div className="w-full">
+          <div className="flex flex-col gap-2 mx-auto w-40 pt-8 pb-4">
             <Link href={`/tables/create?game=${table.game?.id}`}>
               <Button variant={"outline"} className="w-full">
                 Play Again

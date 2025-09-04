@@ -13,7 +13,7 @@ export default function Home() {
         <Image
           width={500}
           height={100}
-          src={"/skarbardLogo.svg"}
+          src={"/skarbard_logo.png"}
           alt="skårbård logo"
           className="w-full"
         ></Image>
@@ -21,7 +21,7 @@ export default function Home() {
 
       <div className="grid justify-items-center gap-2">
         <Link href={"/tables/create"}>
-          <Button className="px-8  font-extrabold w-full">
+          <Button className="px-8 font-extrabold w-full">
             Start New Table
           </Button>
         </Link>

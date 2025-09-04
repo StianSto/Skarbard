@@ -17,15 +17,6 @@ export default function Tables() {
 
   return (
     <main className="flex flex-col items-center px-4 py-8 ">
-      <Image
-        width={500}
-        height={100}
-        src={"/skarbardLogo.svg"}
-        alt="skårbård logo"
-        className="w-full max-w-[300px]"
-        loading="eager"
-      ></Image>
-
       <section className="w-full max-w-[800px] my-8">
         <h1 className="text-3xl font-lucky ">Tables</h1>
         <div>
@@ -36,7 +27,7 @@ export default function Tables() {
               onChange={(e) => {
                 setSearchInput(e.target.value);
               }}
-              className="flex-1 pb-1 border-0 rounded-none"
+              className="flex-1 pb-1 border-0"
             ></Input>
             <Search className="absolute right-0 -translate-y-1/2 top-1/2 me-2" />
           </div>

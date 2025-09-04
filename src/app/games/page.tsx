@@ -15,15 +15,6 @@ export default function Games() {
 
   return (
     <main className="flex flex-col items-center py-8 px-4 ">
-      <Image
-        width={500}
-        height={100}
-        src={"/skarbardLogo.svg"}
-        alt="skårbård logo"
-        className="w-full max-w-[300px]"
-        loading="eager"
-      ></Image>
-
       <section className="w-full max-w-[800px] my-8">
         <h1 className="text-3xl font-lucky ">Games</h1>
 
@@ -35,7 +26,7 @@ export default function Games() {
               onChange={(e) => {
                 setSearchInput(e.target.value);
               }}
-              className="border-0 rounded-none flex-1 pb-1"
+              className="border-0 flex-1 pb-1 rounded-sm"
             ></Input>
             <Search className="absolute top-1/2 right-0 -translate-y-1/2 me-2" />
           </div>
@@ -73,7 +64,9 @@ function DisplayGamesList({
               className="bg-white hover:bg-slate-100 py-2 h-auto"
               size={"default"}
             >
-              <span className="font-lucky px-6 text-lg mt-1">{title}</span>
+              <span className="font-lucky px-6 text-lg pt-1 mb-[-0.25rem]">
+                {title}
+              </span>
             </Button>
           </Link>
         </li>
