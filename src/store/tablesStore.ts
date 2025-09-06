@@ -14,6 +14,7 @@ interface StoreTablesState {
 interface StoreTableActions {
 	addTable: (newTable: PlayGame) => void
 	saveTables: (tables: Map<string, PlayGame>) => void
+	removeTable: (tableId: string) => void
 }
 
 export const useStoreTable = create<StoreTablesState & StoreTableActions>()(persist(
@@ -34,6 +35,15 @@ export const useStoreTable = create<StoreTablesState & StoreTableActions>()(pers
 			},
 			saveTables: (tables) => {
 				localStorage.setItem(STORE_KEY_TABLES, JSON.stringify(tables))
+			},
+			removeTable: (tableId) => {
+				set(state => {
+					let updateTable = new Map(state.tablesState)
+					updateTable.delete(tableId);
+					state.saveTables(updateTable)
+
+					return { tablesState: updateTable }
+				})
 			}
 		}
 
@@ -55,7 +65,6 @@ export const useStoreTable = create<StoreTablesState & StoreTableActions>()(pers
 			},
 
 			setItem: (name, newValue: StorageValue<StoreTablesState>) => {
-				// functions cannot be JSON encoded
 				const str = JSON.stringify({
 					state: {
 						...newValue.state,
