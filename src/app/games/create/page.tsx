@@ -33,7 +33,6 @@ import createRuleString from "@/lib/functions/utils/createRuleString";
 import { v4 as uuidv4 } from "uuid";
 import dynamic from "next/dynamic";
 
-
 function CreateGame() {
   const router = useRouter();
 
@@ -45,18 +44,10 @@ function CreateGame() {
   const { game, updateRule, updateTitle, updateGameState } =
     useGameSettingsStore((state) => state);
 
-  let deleteGameMessage = null;
-
   function handleRemoveGame() {
     if (idParam && gameExists) {
       removeGame(idParam);
       router.replace("/games");
-    } else {
-      deleteGameMessage =
-        "Could not delete game. Refresh the page and try again";
-      setTimeout(() => {
-        deleteGameMessage = null;
-      }, 1000);
     }
   }
 
@@ -92,23 +83,19 @@ function CreateGame() {
             </DialogTrigger>
 
             <DialogContent className="text-black bg-white sm:mx-4 ">
-              {deleteGameMessage ? (
-                <p>{deleteGameMessage}</p>
-              ) : (
-                <>
-                  <p className="">Are you sure you want to delete this game?</p>
-                  <div className="flex justify-between gap-4">
-                    <DialogClose asChild>
-                      <Button variant={"destructive"}>No</Button>
-                    </DialogClose>
-                    <DialogClose asChild>
-                      <Button variant={"ghost"} onClick={handleRemoveGame}>
-                        Yes, i want to delete this game
-                      </Button>
-                    </DialogClose>
-                  </div>
-                </>
-              )}
+              <>
+                <p className="">Are you sure you want to delete this game?</p>
+                <div className="flex justify-between gap-4">
+                  <DialogClose asChild>
+                    <Button variant={"destructive"}>No</Button>
+                  </DialogClose>
+                  <DialogClose asChild>
+                    <Button variant={"ghost"} onClick={handleRemoveGame}>
+                      Yes, i want to delete this game
+                    </Button>
+                  </DialogClose>
+                </div>
+              </>
             </DialogContent>
           </Dialog>
         )}

@@ -49,7 +49,7 @@ export default function GameRule({
   };
 
   return (
-    <Card className="relative w-full max-w-md p-4">
+    <Card className="relative w-full p-4">
       <CardHeader className="p-0 text-lg font-bold">
         {createRuleString(rule)}
       </CardHeader>

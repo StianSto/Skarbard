@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Luckiest_Guy } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -35,6 +36,7 @@ export default function RootLayout({
           <Nav />
         </header>
         {children}
+        <Toaster />
       </body>
     </html>
   );
