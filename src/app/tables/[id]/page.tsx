@@ -19,6 +19,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import DialogDeleteConfirm from "@/components/utils/DeleteDialogConfirm";
 
 function ViewTables({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -65,35 +66,16 @@ function ViewTables({ params }: { params: { id: string } }) {
     <main className="py-8 px-4 mx-auto max-w-xl flex flex-col flex-1">
       {table && game && players ? (
         <>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button
-                variant={"destructive"}
-                className="absolute top-2 right-2"
-              >
-                Delete Table
-              </Button>
-            </DialogTrigger>
+          <DialogDeleteConfirm
+            confirmQueryString="Are you sure u want to permanently delete this table?"
+            confirmString="Yes, i want to delete this table"
+            onConfirm={handleRemoveTable}
+          >
+            <Button variant={"destructive"} className="absolute top-2 right-2">
+              Delete Table
+            </Button>
+          </DialogDeleteConfirm>
 
-            <DialogContent className="text-black bg-white sm:mx-4 ">
-              <>
-                <p className="">
-                  Are you sure you want to delete this game? This will
-                  <em>permanently</em> delete this table
-                </p>
-                <div className="flex justify-between gap-4">
-                  <DialogClose asChild>
-                    <Button variant={"destructive"}>No</Button>
-                  </DialogClose>
-                  <DialogClose asChild>
-                    <Button variant={"ghost"} onClick={handleRemoveTable}>
-                      Yes, i want to delete this game
-                    </Button>
-                  </DialogClose>
-                </div>
-              </>
-            </DialogContent>
-          </Dialog>
           <h1 className="font-lucky text-center text-4xl">{game.title}</h1>
           <section className="my-10">
             <div className="flex justify-between items-center">
@@ -142,7 +124,7 @@ function ViewTables({ params }: { params: { id: string } }) {
           </h2>
           <p>error: {errMsg}</p>
 
-          <Link href={"/tables"} className="mt-8 max-w-10">
+          <Link href={"/tables"} className="mt-8">
             <Button>Go back to my tables page</Button>
           </Link>
         </>
