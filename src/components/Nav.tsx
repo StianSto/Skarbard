@@ -13,7 +13,6 @@ export default function Nav() {
   const pathname = usePathname();
 
   useEffect(() => {
-    console.log(pathname);
     if (pathname === "/") return setRenderNav(false);
     if (pathname.startsWith("/play/")) return setRenderNav(false);
     setRenderNav(true);

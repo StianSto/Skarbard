@@ -2,7 +2,7 @@
 
 // react / next
 import React, { useEffect } from "react";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // store
 import { storeGameLib } from "@/store/gameLibraryStore";
@@ -21,12 +21,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+
 import createRuleString from "@/lib/functions/utils/createRuleString";
 
 // utils
@@ -44,13 +39,6 @@ function CreateGame() {
   const { game, updateRule, updateTitle, updateGameState } =
     useGameSettingsStore((state) => state);
 
-  function handleRemoveGame() {
-    if (idParam && gameExists) {
-      removeGame(idParam);
-      router.replace("/games");
-    }
-  }
-
   useEffect(() => {
     updateGameState(
       gameExists
@@ -61,7 +49,6 @@ function CreateGame() {
             options: defaultSettings,
           }
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function saveGame() {
@@ -75,30 +62,6 @@ function CreateGame() {
         <h1 className="font-lucky text-4xl">
           {gameExists ? "Edit Game" : "New Game"}
         </h1>
-
-        {idParam && (
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant={"destructive"}>Delete</Button>
-            </DialogTrigger>
-
-            <DialogContent className="text-black bg-white sm:mx-4 ">
-              <>
-                <p className="">Are you sure you want to delete this game?</p>
-                <div className="flex justify-between gap-4">
-                  <DialogClose asChild>
-                    <Button variant={"destructive"}>No</Button>
-                  </DialogClose>
-                  <DialogClose asChild>
-                    <Button variant={"ghost"} onClick={handleRemoveGame}>
-                      Yes, i want to delete this game
-                    </Button>
-                  </DialogClose>
-                </div>
-              </>
-            </DialogContent>
-          </Dialog>
-        )}
       </div>
 
       <div className="max-w-md my-8">
